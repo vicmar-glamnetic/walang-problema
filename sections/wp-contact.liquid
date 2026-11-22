@@ -1,0 +1,63 @@
+<section class="wp-s wp-contact" {{ section.shopify_attributes }}>
+  {%- form 'contact', class: 'wp-contact__form', id: 'wp-contact-form' -%}
+    {%- if form.posted_successfully? -%}<p class="wp-contact__msg" role="status">{{ section.settings.success | escape }}</p>{%- endif -%}
+    {%- if form.errors -%}<p class="wp-contact__err" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+    <div><label for="c-name">Name</label><input id="c-name" class="wp-field" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></div>
+    <div><label for="c-email">Email</label><input id="c-email" class="wp-field" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></div>
+    <div><label for="c-order">Order number (optional)</label><input id="c-order" class="wp-field" type="text" name="contact[Order number]"></div>
+    <div>
+      <label for="c-topic">Topic</label>
+      <select id="c-topic" class="wp-field" name="contact[Topic]">
+        {%- assign topics = section.settings.topics | split: ',' -%}
+        {%- for topic in topics -%}<option value="{{ topic | strip | escape }}">{{ topic | strip | escape }}</option>{%- endfor -%}
+      </select>
+    </div>
+    <div class="wp-full"><label for="c-msg">Message</label><textarea id="c-msg" class="wp-field wp-field--area" name="contact[body]" rows="6" required>{{ form.body }}</textarea></div>
+    <div class="wp-full"><button type="submit" class="wp-btn wp-btn--primary">{{ section.settings.button_label | escape }}</button></div>
+  {%- endform -%}
+  <aside class="wp-contact__aside">
+    <div class="wp-reach">
+      <h2 class="wp-hd">{{ section.settings.reach_heading | escape }}</h2>
+      {%- if section.settings.email != blank -%}<a href="mailto:{{ section.settings.email | escape }}" style="word-break: break-all">{{ section.settings.email | escape }}</a>{%- endif -%}
+      {%- if section.settings.facebook_url != blank -%}<a href="{{ section.settings.facebook_url }}">{{ section.settings.facebook_label | escape }}</a>{%- endif -%}
+      {%- if section.settings.instagram_url != blank -%}<a href="{{ section.settings.instagram_url }}">{{ section.settings.instagram_label | escape }}</a>{%- endif -%}
+      {%- if section.settings.phone != blank -%}<a href="tel:{{ section.settings.phone | remove: " " | remove: "." }}">{{ section.settings.phone | escape }}</a>{%- endif -%}
+      {%- if section.settings.extra != blank -%}<span>{{ section.settings.extra | escape }}</span>{%- endif -%}
+      {%- if section.settings.work_text != blank -%}<h3 class="wp-hd wp-reach__sub">{{ section.settings.work_heading | escape }}</h3><p class="wp-reach__p">{{ section.settings.work_text | escape }}</p>{%- endif -%}
+    </div>
+    <div class="wp-faq">
+      <h2 class="wp-hd">{{ section.settings.faq_heading | escape }}</h2>
+      {%- for block in section.blocks -%}
+        <details {{ block.shopify_attributes }}><summary>{{ block.settings.question | escape }}</summary><p>{{ block.settings.answer | escape }}</p></details>
+      {%- endfor -%}
+    </div>
+  </aside>
+</section>
+{% schema %}
+{
+  "name": "WP Contact",
+  "settings": [
+    { "type": "text", "id": "topics", "label": "Topics (comma separated)", "default": "Order question, Sizing, Wholesale, Other" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Send message" },
+    { "type": "text", "id": "success", "label": "Success message", "default": "Salamat! Your message has been sent." },
+    { "type": "text", "id": "reach_heading", "label": "Contact box heading", "default": "Reach us directly" },
+    { "type": "text", "id": "email", "label": "Email", "default": "Walangproblemabrand@gmail.com" },
+    { "type": "url", "id": "facebook_url", "label": "Facebook link" },
+    { "type": "text", "id": "facebook_label", "label": "Facebook label", "default": "Facebook: walangproblemabrand" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram link" },
+    { "type": "text", "id": "instagram_label", "label": "Instagram label", "default": "Instagram: walangproblemabrand" },
+    { "type": "text", "id": "phone", "label": "Phone" },
+    { "type": "text", "id": "extra", "label": "Extra line (location or hours)" },
+    { "type": "text", "id": "work_heading", "label": "Work with us heading", "default": "Work with us" },
+    { "type": "textarea", "id": "work_text", "label": "Work with us text" },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Quick answers" }
+  ],
+  "blocks": [{
+    "type": "faq", "name": "Question",
+    "settings": [
+      { "type": "text", "id": "question", "label": "Question", "default": "How long is delivery?" },
+      { "type": "textarea", "id": "answer", "label": "Answer", "default": "[Delivery times per area.]" }
+    ]
+  }]
+}
+{% endschema %}

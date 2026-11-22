@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "wp-footer",
+      "settings": {
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "logo": "shopify://shop_images/walang-problema-logo-black.png",
+        "pay_fallback": "GCash · Credit card · Bank transfer (BPI) · Cash on delivery",
+        "base_text": "© 2026 Walang Problema · El Nido, Palawan, Philippines"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

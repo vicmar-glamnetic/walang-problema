@@ -1,0 +1,47 @@
+<footer class="wp-s wp-footer" {{ section.shopify_attributes }}>
+  <div class="wp-footer__grid">
+    <div class="wp-footer__brand">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: height: 132 | image_tag: height: 44, alt: shop.name, loading: 'lazy' }}
+      {%- else -%}
+        <span class="wp-logo__text" style="color:#fff">{{ shop.name | escape }}</span>
+      {%- endif -%}
+      <p class="wp-footer__tag">{{ section.settings.tagline | escape }}</p>
+    </div>
+    <div class="wp-footer__col">
+      <b>{{ section.settings.shop_heading | escape }}</b>
+      {%- for link in linklists[section.settings.shop_menu].links -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endfor -%}
+    </div>
+    <div class="wp-footer__col">
+      <b>{{ section.settings.help_heading | escape }}</b>
+      {%- for link in linklists[section.settings.help_menu].links -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endfor -%}
+    </div>
+    <div class="wp-footer__col">
+      <b>{{ section.settings.pay_heading | escape }}</b>
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="wp-footer__pay">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>{%- endfor -%}
+        </ul>
+      {%- else -%}
+        <span>{{ section.settings.pay_fallback | escape }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="wp-footer__base">{{ section.settings.base_text | escape }}</div>
+</footer>
+{% schema %}
+{
+  "name": "WP Footer",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (use the dark version, it is inverted to white)" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Island-inspired lifestyle clothing from the Philippines." },
+    { "type": "text", "id": "shop_heading", "label": "Column 1 heading", "default": "Shop" },
+    { "type": "link_list", "id": "shop_menu", "label": "Column 1 menu" },
+    { "type": "text", "id": "help_heading", "label": "Column 2 heading", "default": "Help" },
+    { "type": "link_list", "id": "help_menu", "label": "Column 2 menu" },
+    { "type": "text", "id": "pay_heading", "label": "Column 3 heading", "default": "We accept" },
+    { "type": "text", "id": "pay_fallback", "label": "Text shown until payment methods are set up", "default": "[YOUR PAYMENT METHODS]" },
+    { "type": "text", "id": "base_text", "label": "Bottom line", "default": "Concept design by VJ Yanson for Walang Problema. Product photos to be supplied by the brand." }
+  ]
+}
+{% endschema %}

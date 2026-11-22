@@ -1,0 +1,24 @@
+<section class="wp-s wp-banner wp-banner--article" {{ section.shopify_attributes }}>
+  <div class="wp-banner__in">
+    <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / <a href="{{ blog.url }}">{{ blog.title | escape }}</a> / {{ article.title | escape }}</nav>
+    {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-banner__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+    <h1 class="wp-hd wp-banner__title wp-article__title">{{ article.title | escape }}</h1>
+    <p class="wp-banner__text">{{ article.published_at | date: '%B %-d, %Y' }}</p>
+  </div>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-banner__wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+</section>
+<section class="wp-s wp-prose-wrap">
+  <div class="wp-prose">
+    {{ article.content }}
+    <p class="wp-article__back"><a href="{{ blog.url }}" class="wp-btn wp-btn--ghost">{{ section.settings.back_label | escape }}</a></p>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Article",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "El Nido Times" },
+    { "type": "text", "id": "back_label", "label": "Back button label", "default": "Back to all stories" }
+  ]
+}
+{% endschema %}

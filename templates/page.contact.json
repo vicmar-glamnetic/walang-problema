@@ -1,0 +1,38 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": { "type": "wp-page-banner", "settings": { "kicker": "Kumusta!", "heading": "Get in touch", "text": "Contact us for any further questions, possible projects and business partnerships." } },
+    "main": {
+      "type": "wp-contact",
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "question": "How long is delivery?", "answer": "We ship anywhere in the Philippines with J&T Express for a flat ₱190. Delivery takes 5 to 15 working days, depending on your address." } },
+        "q2": { "type": "faq", "settings": { "question": "Can I return or exchange?", "answer": "Yes, within 7 days of receiving your item, as long as it is unworn, unused and in its original packaging. Underwear, swimwear and accessories cannot be returned. Email us to start a return." } },
+        "q3": { "type": "faq", "settings": { "question": "Do you ship outside the Philippines?", "answer": "Not yet, but send us an email with your complete address and we will let you know the shipping cost to your country." } }
+      },
+      "block_order": ["q1", "q2", "q3"],
+      "settings": {
+        "topics": "Order question, Sizing, Projects and partnerships, Other",
+        "reach_heading": "Let's have a chat!",
+        "email": "hello@walangproblema.com",
+        "facebook_url": "https://www.facebook.com/walangproblemabrand",
+        "facebook_label": "Facebook: walangproblemabrand",
+        "instagram_url": "https://www.instagram.com/walangproblemabrand/",
+        "instagram_label": "Instagram: @walangproblemabrand",
+        "phone": "+63 929 027 1366",
+        "extra": "El Nido, Palawan, Philippines",
+        "work_heading": "Work with us",
+        "work_text": "Drop us a line, let's get to know each other, we find ways, walang problema!",
+        "faq_heading": "Quick answers"
+      }
+    }
+  },
+  "order": ["banner", "main"]
+}

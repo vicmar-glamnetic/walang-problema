@@ -1,0 +1,29 @@
+<section class="wp-s wp-news" {{ section.shopify_attributes }}>
+  <div class="wp-news__in">
+    <div class="wp-news__copy">
+      <h2 class="wp-hd wp-news__title">{{ section.settings.heading | escape }}</h2>
+      <p class="wp-news__text">{{ section.settings.text | escape }}</p>
+    </div>
+    {%- form 'customer', class: 'wp-news__form', id: section.id -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label for="wp-nl-{{ section.id }}" class="wp-sr">Email address</label>
+      <input id="wp-nl-{{ section.id }}" class="wp-news__input" type="email" name="contact[email]" placeholder="{{ section.settings.placeholder | escape }}" required autocomplete="email">
+      <button type="submit" class="wp-news__btn">{{ section.settings.button_label | escape }}</button>
+      {%- if form.posted_successfully? -%}<p class="wp-news__msg" role="status">{{ section.settings.success | escape }}</p>{%- endif -%}
+      {%- if form.errors -%}<p class="wp-news__msg" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Join the island crew" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Be first to know about new drops and promos. No spam, walang problema." },
+    { "type": "text", "id": "placeholder", "label": "Email placeholder", "default": "Your email address" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Subscribe" },
+    { "type": "text", "id": "success", "label": "Success message", "default": "Salamat! You're on the list." }
+  ],
+  "presets": [{ "name": "WP Newsletter" }]
+}
+{% endschema %}

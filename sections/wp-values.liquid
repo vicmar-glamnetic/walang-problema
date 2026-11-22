@@ -1,0 +1,26 @@
+<section class="wp-s wp-vals" {{ section.shopify_attributes }}>
+  <div class="wp-vals__grid">
+    {%- for block in section.blocks -%}
+      <div class="wp-val" style="background: {{ block.settings.bg }}" {{ block.shopify_attributes }}>
+        {% render 'wp-icon', name: block.settings.icon %}
+        <h3>{{ block.settings.title | escape }}</h3>
+        <p>{{ block.settings.text | escape }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Value cards",
+  "blocks": [{
+    "type": "card", "name": "Card",
+    "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "default": "waves", "options": [{ "value": "waves", "label": "Waves" }, { "value": "shirt", "label": "Shirt" }, { "value": "heart", "label": "Heart" }] },
+      { "type": "text", "id": "title", "label": "Title", "default": "Island-inspired" },
+      { "type": "textarea", "id": "text", "label": "Text", "default": "Designs drawn from Philippine beaches, islands and the easy pace of coastal life." },
+      { "type": "color", "id": "bg", "label": "Background", "default": "#2A8C8C" }
+    ]
+  }],
+  "presets": [{ "name": "WP Value cards" }]
+}
+{% endschema %}

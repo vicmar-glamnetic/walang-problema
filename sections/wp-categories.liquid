@@ -1,0 +1,35 @@
+<section class="wp-s wp-sec wp-cats" id="shop" {{ section.shopify_attributes }}>
+  <div class="wp-sec__head">
+    <h2 class="wp-hd wp-sec__title">{{ section.settings.heading | escape }}</h2>
+    {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.link | default: routes.all_products_collection_url }}" class="wp-link">{{ section.settings.link_label | escape }}</a>{%- endif -%}
+  </div>
+  <div class="wp-cats__grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link | default: routes.all_products_collection_url }}" class="wp-cat" style="background: {{ block.settings.bg }}; color: {{ block.settings.fg }}" {{ block.shopify_attributes }}>
+        {% render 'wp-icon', name: block.settings.icon %}
+        <span class="wp-cat__name">{{ block.settings.title | escape }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Category tiles",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop the island" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all products" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "blocks": [{
+    "type": "tile", "name": "Tile",
+    "settings": [
+      { "type": "text", "id": "title", "label": "Title", "default": "Men" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "select", "id": "icon", "label": "Icon", "default": "men", "options": [{ "value": "men", "label": "Men" }, { "value": "women", "label": "Women" }, { "value": "kids", "label": "Kids" }, { "value": "accessories", "label": "Cap" }, { "value": "beach", "label": "Beach umbrella" }] },
+      { "type": "color", "id": "bg", "label": "Background", "default": "#2A8C8C" },
+      { "type": "color", "id": "fg", "label": "Text", "default": "#FFFFFF" }
+    ]
+  }],
+  "presets": [{ "name": "WP Category tiles" }]
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+<section class="wp-s wp-cta" {{ section.shopify_attributes }}>
+  <h2 class="wp-hd wp-cta__title">{{ section.settings.heading | escape }}</h2>
+  <div class="wp-cta__btns">
+    {%- if section.settings.button_label != blank -%}<a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="wp-btn wp-btn--primary">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+    {%- if section.settings.button2_label != blank -%}<a href="{{ section.settings.button2_link | default: routes.root_url }}" class="wp-btn wp-btn--ghost">{{ section.settings.button2_label | escape }}</a>{%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Call to action",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Ready for island life?" },
+    { "type": "text", "id": "button_label", "label": "Button 1 label", "default": "Shop the collection" },
+    { "type": "url", "id": "button_link", "label": "Button 1 link" },
+    { "type": "text", "id": "button2_label", "label": "Button 2 label", "default": "Get in touch" },
+    { "type": "url", "id": "button2_link", "label": "Button 2 link" }
+  ],
+  "presets": [{ "name": "WP Call to action" }]
+}
+{% endschema %}

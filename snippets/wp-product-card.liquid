@@ -1,0 +1,39 @@
+{%- comment -%}
+  Product card from the Walang Problema design.
+  Accepts: product, index (0-based, picks the pastel backdrop).
+{%- endcomment -%}
+{%- assign wp_bgs = '#E6D9C2,#D9E4D2,#F2D9C4,#D6E8E6,#EFE3CF,#F7DCC0' | split: ',' -%}
+{%- assign wp_i = index | default: 0 | modulo: 6 -%}
+<article class="wp-card">
+  <a href="{{ product.url }}" class="wp-card__media" aria-label="{{ 'accessibility.view_product' | t: default: 'View' }} {{ product.title | escape }}">
+    <div class="wp-card__box" style="background: {{ wp_bgs[wp_i] }}">
+      {%- if product.tags contains 'best-seller' -%}
+        <span class="wp-badge">Best seller</span>
+      {%- elsif product.tags contains 'new' -%}
+        <span class="wp-badge">New</span>
+      {%- endif -%}
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', widths: '320, 480, 640', sizes: '(min-width: 1280px) 280px, 50vw', alt: product.featured_image.alt | default: product.title }}
+      {%- else -%}
+        {% render 'wp-product-art', handle: product.handle %}
+      {%- endif -%}
+    </div>
+  </a>
+  <div class="wp-card__info">
+    <h3 class="wp-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    <span class="wp-card__price">
+      {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}
+      {{- product.price | money_without_trailing_zeros -}}
+    </span>
+  </div>
+  {%- if product.available == false -%}
+    <button type="button" class="wp-card__btn" disabled>{{ 'content.sold_out' | t: default: 'Sold out' }}</button>
+  {%- elsif product.variants.size == 1 -%}
+    {%- form 'product', product -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="wp-card__btn">Add to cart</button>
+    {%- endform -%}
+  {%- else -%}
+    <a href="{{ product.url }}" class="wp-card__btn">Choose options</a>
+  {%- endif -%}
+</article>

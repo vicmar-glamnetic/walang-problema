@@ -1,0 +1,112 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign crumb_collection = collection
+  if crumb_collection == blank
+    assign crumb_collection = product.collections.first
+  endif
+  assign swatch_colors = 'black=#1B2421|white=#FFFFFF|army green=#4B5A3A|military green=#4B5A3A|green=#2E7D4F|mint green=#9ED9BE|light blue=#A9CDE8|sky blue=#8EC9EA|blue=#2F6DB5|royal blue=#2648A0|navy blue=#1F2E4F|turquoise=#2BB3B1|pink=#F2A7C0|light pink=#F7D3DE|dark pink=#D9547F|coral=#F07C66|red=#C8352E|rusty red=#A4492F|maroon=#6E2233|orange=#EE8A36|yellow=#F4CE4A|violet=#8A6FBF|grey=#8C8C8C|light grey=#C9C9C9|brown=#7A5136|beige=#E3D3B5|sand=#D8C39A|cream=#F3E9D2|khaki=#BDB48A|white pink=linear-gradient(135deg,#FFFFFF 50%,#F2A7C0 50%)|white army green=linear-gradient(135deg,#FFFFFF 50%,#4B5A3A 50%)' | split: '|'
+-%}
+<section class="wp-s wp-pdp" data-wp-product {{ section.shopify_attributes }}>
+  <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / {% if crumb_collection != blank %}<a href="{{ crumb_collection.url }}">{{ crumb_collection.title | escape }}</a> / {% endif %}{{ product.title | escape }}</nav>
+  <div class="wp-pdp__cols">
+    <div class="wp-pdp__gal">
+      <div class="wp-pdp__main">
+        {%- if product.tags contains 'best-seller' -%}<span class="wp-badge">Best seller</span>{%- elsif product.tags contains 'new' -%}<span class="wp-badge">New</span>{%- endif -%}
+        {%- if product.featured_image -%}
+          <img data-wp-main-img src="{{ product.featured_image | image_url: width: 1200 }}" srcset="{{ product.featured_image | image_url: width: 600 }} 600w, {{ product.featured_image | image_url: width: 1200 }} 1200w" sizes="(min-width: 1280px) 600px, 100vw" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" height="1200" loading="eager">
+        {%- else -%}
+          {% render 'wp-product-art', handle: product.handle, width: 60 %}
+        {%- endif -%}
+      </div>
+      <div class="wp-pdp__thumbs">
+        {%- if product.images.size > 1 -%}
+          {%- for image in product.images limit: 4 -%}
+            <button type="button" class="wp-thumb" data-wp-thumb data-src="{{ image | image_url: width: 1200 }}" aria-label="View photo {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">{{ image | image_url: width: 300 | image_tag: loading: 'lazy', alt: image.alt }}</button>
+          {%- endfor -%}
+        {%- elsif product.images.size == 0 -%}
+          {%- assign thumb_bgs = '#E6D9C2,#D6E8E6,#F2D9C4,#D9E4D2' | split: ',' -%}
+          {%- for bg in thumb_bgs -%}
+            <span class="wp-thumb" style="background: {{ bg }};{% if forloop.first %} border: 3px solid #0E4D4F{% endif %}" aria-hidden="true">{% render 'wp-product-art', handle: product.handle, width: 55, bare: true %}</span>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="wp-pdp__info">
+      <div>
+        {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-pdp__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+        <h1 class="wp-hd wp-pdp__title">{{ product.title | escape }}</h1>
+        <p class="wp-pdp__price" data-wp-price>{{ current.price | money_without_trailing_zeros }}{% if current.compare_at_price > current.price %}<s>{{ current.compare_at_price | money_without_trailing_zeros }}</s>{% endif %}</p>
+      </div>
+      {%- if product.description != blank -%}<div class="wp-pdp__desc">{{ product.description }}</div>{%- endif -%}
+      {%- form 'product', product, id: 'wp-product-form' -%}
+        <input type="hidden" name="id" value="{{ current.id }}">
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign oname = option.name | downcase -%}
+            {%- assign is_color = false -%}
+            {%- if oname == 'color' or oname == 'colour' -%}{%- assign is_color = true -%}{%- endif -%}
+            <div data-wp-option="{{ forloop.index0 }}">
+              <div class="wp-opt__label">
+                <span>{{ option.name | escape }}{% if is_color %}: <span data-wp-selected>{{ option.selected_value | escape }}</span>{% endif %}</span>
+                {%- if oname == 'size' and pages['size-guide'] != blank -%}<a href="{{ pages['size-guide'].url }}" class="wp-link" style="font-size:14px">Size guide</a>{%- endif -%}
+              </div>
+              <div class="{% if is_color %}wp-swatches{% else %}wp-sizes{% endif %}">
+                {%- for value in option.values -%}
+                  {%- assign vname = value | append: '' -%}
+                  {%- assign pressed = 'false' -%}
+                  {%- if vname == option.selected_value -%}{%- assign pressed = 'true' -%}{%- endif -%}
+                  {%- if is_color -%}
+                    {%- assign vkey = vname | downcase -%}
+                    {%- assign sw = '#CDBFA6' -%}
+                    {%- if value.swatch.color -%}{%- assign sw = value.swatch.color -%}{%- endif -%}
+                    {%- for pair in swatch_colors -%}{%- assign kv = pair | split: '=' -%}{%- if kv[0] == vkey -%}{%- assign sw = kv[1] -%}{%- endif -%}{%- endfor -%}
+                    <button type="button" class="wp-swatch" aria-label="{{ vname | escape }}" aria-pressed="{{ pressed }}" data-value="{{ vname | escape }}" style="background: {{ sw }};{% if vkey contains 'white' or vkey == 'cream' %} border-color: #CDBFA6{% endif %}"></button>
+                  {%- else -%}
+                    <button type="button" class="wp-size" aria-pressed="{{ pressed }}" data-value="{{ vname | escape }}">{{ vname | escape }}</button>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+        <div class="wp-buy">
+          <div class="wp-qty" data-wp-qty>
+            <button type="button" data-step="down" aria-label="Decrease quantity">−</button>
+            <input type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+            <button type="button" data-step="up" aria-label="Increase quantity">+</button>
+          </div>
+          <button type="submit" name="add" class="wp-btn wp-btn--primary" data-wp-add{% unless current.available %} disabled{% endunless %}>{% if current.available %}Add to cart{% else %}Sold out{% endif %}</button>
+        </div>
+        <button type="submit" name="checkout" class="wp-btn wp-btn--gold wp-btn--now" data-wp-buy{% unless current.available %} disabled{% endunless %}>Buy it now</button>
+      {%- endform -%}
+      <div class="wp-acc">
+        {%- for block in section.blocks -%}
+          <details{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.heading | escape }}</summary>
+            <div class="wp-acc__body">{{ block.settings.text }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+  <script type="application/json" data-wp-variants>
+    {"currency": {{ cart.currency.iso_code | json }}, "addLabel": "Add to cart", "soldOutLabel": "Sold out", "unavailableLabel": "Unavailable",
+     "variants": [{% for v in product.variants %}{"id": {{ v.id }}, "price": {{ v.price }}, "compare_at_price": {{ v.compare_at_price | default: 0 }}, "available": {{ v.available }}, "options": {{ v.options | json }}, "image": {% if v.featured_image %}{{ v.featured_image | image_url: width: 1200 | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}]}
+  </script>
+</section>
+{% schema %}
+{
+  "name": "WP Product",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Para sa mga nature lovers" }
+  ],
+  "blocks": [{
+    "type": "accordion", "name": "Accordion",
+    "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Details" },
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>[Material, fit, care instructions.]</p>" },
+      { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+    ]
+  }]
+}
+{% endschema %}

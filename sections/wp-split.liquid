@@ -1,0 +1,29 @@
+<section class="wp-s wp-split" {{ section.shopify_attributes }}>
+  <div class="wp-split__in">
+    <div class="wp-split__copy">
+      <p class="wp-hand wp-split__kicker">{{ section.settings.kicker | escape }}</p>
+      <h2 class="wp-hd wp-split__title">{{ section.settings.heading | escape }}</h2>
+      <p class="wp-split__text">{{ section.settings.text | escape | newline_to_br }}</p>
+    </div>
+    <div class="wp-split__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy' }}
+      {%- else -%}
+        {{ section.settings.placeholder | escape }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Story split",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Keep Palawan Wild" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Love the islands back" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "[Your story about Palawan and how the brand gives back to the islands that inspire it.]" },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "placeholder", "label": "Placeholder caption (shown until a photo is added)", "default": "Photo: Palawan or team photo from the brand" }
+  ],
+  "presets": [{ "name": "WP Story split" }]
+}
+{% endschema %}

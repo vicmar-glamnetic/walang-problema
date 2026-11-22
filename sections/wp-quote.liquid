@@ -1,0 +1,16 @@
+<section class="wp-s wp-quote" {{ section.shopify_attributes }}>
+  <figure class="wp-quote__in">
+    <blockquote class="wp-hd wp-quote__text">{{ section.settings.quote | escape }}</blockquote>
+    {%- if section.settings.author != blank -%}<figcaption class="wp-hand wp-quote__by">{{ section.settings.author | escape }}</figcaption>{%- endif -%}
+  </figure>
+</section>
+{% schema %}
+{
+  "name": "WP Quote",
+  "settings": [
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "We don't stop playing because we grow old, we grow old because we stop playing." },
+    { "type": "text", "id": "author", "label": "Author", "default": "George Bernard Shaw" }
+  ],
+  "presets": [{ "name": "WP Quote" }]
+}
+{% endschema %}

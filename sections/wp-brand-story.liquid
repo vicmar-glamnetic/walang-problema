@@ -1,0 +1,31 @@
+<section class="wp-s wp-story" id="story" {{ section.shopify_attributes }}>
+  <div class="wp-story__panel">
+    <div class="wp-story__copy">
+      <p class="wp-hand wp-story__kicker">{{ section.settings.kicker | escape }}</p>
+      <h2 class="wp-hd wp-story__title">{{ section.settings.title | escape | newline_to_br }}</h2>
+      <p class="wp-story__text">{{ section.settings.text | escape }}</p>
+      {%- if section.settings.button_label != blank -%}<a href="{{ section.settings.button_link | default: routes.root_url }}" class="wp-btn wp-btn--gold wp-story__btn">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+    </div>
+    <div class="wp-story__art">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy' }}
+      {%- else -%}
+        {% render 'wp-art-island' %}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Brand story",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "The Walang Problema way" },
+    { "type": "textarea", "id": "title", "label": "Heading", "default": "Less stress.\nMore sunshine." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Walang Problema is more than a shirt. It is a way of living: slow down, be happy and live life to the fullest, wherever your island is." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Read our story" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" }
+  ],
+  "presets": [{ "name": "WP Brand story" }]
+}
+{% endschema %}

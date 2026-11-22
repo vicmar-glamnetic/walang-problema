@@ -1,0 +1,44 @@
+<section class="wp-s wp-hero{% if section.settings.variant == 'story' %} wp-hero--story{% endif %}" id="top" {{ section.shopify_attributes }}>
+  <div class="wp-hero__in">
+    <div class="wp-hero__copy">
+      {%- if section.settings.variant == 'story' -%}
+        <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / {{ page.title | default: section.settings.kicker | escape }}</nav>
+      {%- endif -%}
+      {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-hero__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+      <h1 class="wp-hd wp-hero__title">{{ section.settings.title | escape | newline_to_br }}</h1>
+      {%- if section.settings.text != blank -%}<p class="wp-hero__text">{{ section.settings.text | escape }}</p>{%- endif -%}
+      {%- if section.settings.button_label != blank or section.settings.button2_label != blank -%}
+        <div class="wp-hero__btns">
+          {%- if section.settings.button_label != blank -%}<a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="wp-btn wp-btn--primary">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+          {%- if section.settings.button2_label != blank -%}<a href="{{ section.settings.button2_link | default: routes.all_products_collection_url }}" class="wp-btn wp-btn--ghost">{{ section.settings.button2_label | escape }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="wp-hero__art">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1280 | image_tag: loading: 'eager', widths: '640, 960, 1280', sizes: '(min-width: 1280px) 600px, 100vw' }}
+      {%- elsif section.settings.variant == 'story' -%}
+        {% render 'wp-art-story' %}
+      {%- else -%}
+        {% render 'wp-art-hero' %}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Hero",
+  "settings": [
+    { "type": "select", "id": "variant", "label": "Layout", "default": "home", "options": [{ "value": "home", "label": "Home (large)" }, { "value": "story", "label": "Our Story (with breadcrumb)" }] },
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Mabuhay, islander!" },
+    { "type": "textarea", "id": "title", "label": "Heading", "default": "Island Life\nin cotton." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Easy tees, caps and beach gear made for slow mornings, salty air and zero stress. Spread the joy and wear it with pride." },
+    { "type": "text", "id": "button_label", "label": "Button 1 label", "default": "Shop New Arrivals" },
+    { "type": "url", "id": "button_link", "label": "Button 1 link" },
+    { "type": "text", "id": "button2_label", "label": "Button 2 label", "default": "Beach Essentials" },
+    { "type": "url", "id": "button2_link", "label": "Button 2 link" },
+    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" }
+  ],
+  "presets": [{ "name": "WP Hero" }]
+}
+{% endschema %}

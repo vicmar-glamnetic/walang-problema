@@ -1,0 +1,40 @@
+{%- paginate blog.articles by section.settings.per_page -%}
+<section class="wp-s wp-blog" {{ section.shopify_attributes }}>
+  <div class="wp-blog__grid">
+    {%- for article in blog.articles -%}
+      {%- assign tone = forloop.index0 | modulo: 4 -%}
+      <article class="wp-post">
+        <a href="{{ article.url }}" class="wp-post__media wp-post__media--{{ tone }}" tabindex="-1" aria-hidden="true">
+          {%- if article.image -%}
+            {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '', sizes: '(min-width: 1000px) 400px, 100vw' }}
+          {%- else -%}
+            <span class="wp-hand">{{ section.settings.fallback_label | escape }}</span>
+          {%- endif -%}
+        </a>
+        <p class="wp-post__date">{{ article.published_at | date: '%B %-d, %Y' }}</p>
+        <h2 class="wp-hd wp-post__title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+        <p class="wp-post__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 26 }}</p>
+        <a href="{{ article.url }}" class="wp-link wp-post__more">{{ section.settings.read_more | escape }}<span class="wp-vh">: {{ article.title | escape }}</span></a>
+      </article>
+    {%- endfor -%}
+  </div>
+  {%- if paginate.pages > 1 -%}
+    <nav class="wp-pages" aria-label="Pagination">
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>{%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+      {%- endfor -%}
+    </nav>
+  {%- endif -%}
+</section>
+{%- endpaginate -%}
+{% schema %}
+{
+  "name": "WP Blog list",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Posts per page", "min": 3, "max": 24, "step": 3, "default": 12 },
+    { "type": "text", "id": "read_more", "label": "Read more label", "default": "Read the story" },
+    { "type": "text", "id": "fallback_label", "label": "Text on posts without a photo", "default": "El Nido Times" }
+  ],
+  "presets": [{ "name": "WP Blog list" }]
+}
+{% endschema %}

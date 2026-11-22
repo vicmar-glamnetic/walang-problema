@@ -1,0 +1,9 @@
+<div class="wp-s wp-announce" {{ section.shopify_attributes }}>{{ section.settings.text | escape }}</div>
+{% schema %}
+{
+  "name": "WP Announcement bar",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Text", "default": "Island Life in cotton. Spread the joy and wear it with pride." }
+  ]
+}
+{% endschema %}

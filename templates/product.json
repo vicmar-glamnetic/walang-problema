@@ -1,0 +1,53 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "wp-product",
+      "blocks": {
+        "a2": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Size and fit",
+            "text": "<p>Find your size in our <a href=\"/pages/size-guide\">size guide</a>, with chest and length measurements per size.</p>",
+            "open": true
+          }
+        },
+        "a3": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Shipping and returns",
+            "text": "<p>J&amp;T Express delivery anywhere in the Philippines: ₱190 flat rate, 5 to 15 working days.</p><p>Returns within 7 days of delivery for unworn items in original packaging. Underwear, swimwear and accessories cannot be returned. <a href=\"/policies/refund-policy\">Read our return policy</a>.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "a2",
+        "a3"
+      ],
+      "settings": {
+        "kicker": "Para sa mga nature lovers"
+      }
+    },
+    "related": {
+      "type": "wp-related",
+      "settings": {
+        "heading": "Complete the island look",
+        "collection": "best-sellers",
+        "limit": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related"
+  ]
+}

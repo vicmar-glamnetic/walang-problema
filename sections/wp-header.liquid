@@ -1,0 +1,41 @@
+<header class="wp-s wp-header" {{ section.shopify_attributes }}>
+  <div class="wp-header__in">
+    <a href="{{ routes.root_url }}" class="wp-logo" aria-label="{{ shop.name | escape }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: height: 156 | image_tag: height: 52, alt: shop.name, loading: 'eager' }}
+      {%- else -%}
+        <span class="wp-logo__text">{{ shop.name | escape }}</span>
+      {%- endif -%}
+    </a>
+    <nav class="wp-nav" aria-label="Main">
+      {%- for link in linklists[section.settings.menu].links -%}
+        <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      {%- endfor -%}
+    </nav>
+    <div class="wp-icons">
+      <details class="wp-mnav">
+        <summary class="wp-icon-btn" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></summary>
+        <nav class="wp-mnav__panel" aria-label="Mobile">
+          {%- for link in linklists[section.settings.menu].links -%}
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {%- endfor -%}
+        </nav>
+      </details>
+      <a href="{{ routes.search_url }}" class="wp-icon-btn" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></a>
+      {%- if section.settings.show_wishlist -%}
+        <button type="button" class="wp-icon-btn" aria-label="Wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"></path></svg></button>
+      {%- endif -%}
+      <a href="{{ routes.cart_url }}" class="wp-icon-btn" aria-label="Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></a>
+    </div>
+  </div>
+</header>
+{% schema %}
+{
+  "name": "WP Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show wishlist icon", "default": true }
+  ]
+}
+{% endschema %}

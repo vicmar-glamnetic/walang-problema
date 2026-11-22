@@ -1,0 +1,38 @@
+{%- liquid
+  if collection != blank
+    if collection.handle == 'all'
+      assign crumb_label = 'Shop all'
+    else
+      assign crumb_label = collection.title
+    endif
+  elsif page != blank
+    assign crumb_label = page.title
+  else
+    assign crumb_label = page_title
+  endif
+  assign banner_title = section.settings.heading | default: crumb_label
+  assign banner_text = section.settings.text
+  if collection != blank and collection.description != blank
+    assign banner_text = collection.description | strip_html | truncate: 140
+  endif
+-%}
+<section class="wp-s wp-banner" {{ section.shopify_attributes }}>
+  <div class="wp-banner__in">
+    <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / {{ crumb_label | escape }}</nav>
+    {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-banner__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+    <h1 class="wp-hd wp-banner__title">{{ banner_title | escape }}</h1>
+    {%- if banner_text != blank -%}<p class="wp-banner__text">{{ banner_text | escape }}</p>{%- endif -%}
+  </div>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-banner__wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+</section>
+{% schema %}
+{
+  "name": "WP Page banner",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line" },
+    { "type": "text", "id": "heading", "label": "Heading (leave empty to use the page or collection title)" },
+    { "type": "textarea", "id": "text", "label": "Text (collections with a description use that instead)", "default": "Tees, caps, bags and beach gear for the island in you." }
+  ],
+  "presets": [{ "name": "WP Page banner" }]
+}
+{% endschema %}

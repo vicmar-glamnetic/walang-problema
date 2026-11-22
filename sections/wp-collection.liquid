@@ -1,0 +1,88 @@
+{%- paginate collection.products by section.settings.per_page -%}
+<section class="wp-s wp-coll" {{ section.shopify_attributes }}>
+  <aside class="wp-coll__aside" aria-label="Filters">
+    {%- liquid
+      assign active_count = 0
+      for filter in collection.filters
+        assign active_count = active_count | plus: filter.active_values.size
+      endfor
+    -%}
+    <details class="wp-fdet" open data-wp-fdet>
+    <summary class="wp-fdet__sum">Filters{% if active_count > 0 %} ({{ active_count }}){% endif %}</summary>
+    <fieldset class="wp-fset">
+      <legend>{{ section.settings.category_heading | escape }}</legend>
+      <a href="{{ routes.all_products_collection_url }}" class="wp-check"><span class="wp-check__box"{% if collection.handle == 'all' %} data-on{% endif %}></span> All</a>
+      {%- for link in linklists[section.settings.category_menu].links -%}
+        {%- if link.type == 'collection_link' -%}
+          <a href="{{ link.url }}" class="wp-check"><span class="wp-check__box"{% if link.object.handle == collection.handle %} data-on{% endif %}></span> {{ link.title | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </fieldset>
+    <form id="wp-filters" method="get" action="{{ collection.url }}">
+      {%- if collection.sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{%- endif -%}
+      {%- for filter in collection.filters -%}
+        <fieldset class="wp-fset">
+          <legend>{{ filter.label | escape }}</legend>
+          {%- if filter.type == 'price_range' -%}
+            <div class="wp-price-in">
+              <input type="number" name="{{ filter.min_value.param_name }}" value="{% if filter.min_value.value %}{{ filter.min_value.value | money_without_currency | replace: ',', '' }}{% endif %}" placeholder="0" min="0" aria-label="Minimum price" data-wp-autosubmit>
+              <span>to</span>
+              <input type="number" name="{{ filter.max_value.param_name }}" value="{% if filter.max_value.value %}{{ filter.max_value.value | money_without_currency | replace: ',', '' }}{% endif %}" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}" min="0" aria-label="Maximum price" data-wp-autosubmit>
+            </div>
+          {%- else -%}
+            {%- for value in filter.values -%}
+              <label class="wp-check">
+                <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} data-wp-autosubmit>
+                {{ value.label | escape }}
+              </label>
+            {%- endfor -%}
+          {%- endif -%}
+        </fieldset>
+      {%- endfor -%}
+    </form>
+    </details>
+    <script>(function(){var d=document.querySelector("[data-wp-fdet]");if(d&&window.matchMedia("(max-width: 900px)").matches){d.removeAttribute("open")}})();</script>
+  </aside>
+  <div class="wp-coll__main">
+    <div class="wp-coll__bar">
+      <span class="wp-coll__count">Showing {{ paginate.items }} {% if paginate.items == 1 %}product{% else %}products{% endif %}</span>
+      <label class="wp-sort">Sort by
+        <select name="sort_by" form="wp-filters" data-wp-autosubmit>
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value | escape }}"{% if option.value == collection.sort_by %} selected{% endif %}>{{ option.name | escape }}</option>
+          {%- endfor -%}
+        </select>
+      </label>
+    </div>
+    {%- if collection.products.size > 0 -%}
+      <div class="wp-grid wp-grid--shop">
+        {%- for product in collection.products -%}
+          {% render 'wp-product-card', product: product, index: forloop.index0 %}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="wp-pages" aria-label="Pagination">
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+            {%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>
+            {%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}" style="padding:0 16px">Next</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="wp-empty">No products found in this collection yet.</p>
+    {%- endif -%}
+  </div>
+</section>
+{%- endpaginate -%}
+{% schema %}
+{
+  "name": "WP Collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 48, "step": 6, "default": 12 },
+    { "type": "text", "id": "category_heading", "label": "Category heading", "default": "Category" },
+    { "type": "link_list", "id": "category_menu", "label": "Category menu (collection links are shown)", "default": "main-menu" }
+  ]
+}
+{% endschema %}

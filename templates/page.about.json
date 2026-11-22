@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "wp-hero",
+      "settings": {
+        "variant": "story",
+        "kicker": "About us",
+        "title": "We are\nWalang Problema",
+        "text": "Walang Problema is what we hear all the time in our tropical paradise of El Nido; a place where time goes slower, smiles are more plenty, and joking around is a way of life.",
+        "button_label": "",
+        "button2_label": "",
+        "image": "shopify://shop_images/walangproblema_headerteam.jpg"
+      }
+    },
+    "intro": {
+      "type": "wp-intro",
+      "settings": {
+        "heading": "Walang Problema Philosophy",
+        "text": "As Europeans living in the Philippines, we found ourselves living differently again, adapting and embracing a more relaxed way of life. In this spirit \"Walang Problema\" was created, with the sole objective to spread this vibe, this spirit, this idea that we don't have to take life too seriously. We are allowed to make mistakes, to be stupid and to entertain and be entertained.\n\n\"Walang Problema\" in Tagalog means \"No Problem\". We want our fans and friends to think positive; to remind ourselves that life is beautiful; to see the beauty in the little things. If you do something stupid, no worries, somebody else did something more stupid.\n\nWearing this lifestyle is the way we choose to spread our message."
+      }
+    },
+    "quote": {
+      "type": "wp-quote",
+      "settings": {
+        "quote": "We don't stop playing because we grow old, we grow old because we stop playing.",
+        "author": "George Bernard Shaw"
+      }
+    },
+    "team": {
+      "type": "wp-team",
+      "blocks": {
+        "pauline": { "type": "member", "settings": { "image": "shopify://shop_images/Pauline-1-1-1.jpg", "name": "Pauline", "bio": "Pauline, after travelling to many different locations in South-East Asia, arrived in El Nido somewhere in 2015, with a camera, ideas and lots of energy. Pauline together with her business partner, Simon, started Fisheye Underwater Productions. From that time on, Pauline has been a real part of the El Nido community. She is known for her green fingers, her effort in making El Nido plastic free, efforts to protect the coral reefs and beach clean-ups. Besides being a world citizen, Pauline is also a true entrepreneur, quick in thinking and determined. She has both fins on the ground and not much can interfere with her good mood.", "fun": "Her fan #1 is Kopiko, who gets super excited every time it sees her." } },
+        "xavier": { "type": "member", "settings": { "image": "shopify://shop_images/XAVI-BW-1-1.jpg", "name": "Xavier", "bio": "Not many things are a problem for Xavier. He turns every issue into an opportunity. Xavier really enjoys being part of business start-ups and fully embraces the road to create something new. As everybody in El Nido, Xavier has had many different international experiences before converting to the Walang Problema lifestyle. In El Nido, he co-founded Gusto Gelato, Sanse Boutique Hotel, The Pangolin Cocktail Bar, Sausage with Benefits and most probably other things on the way. If our team was a car, Xavier would be the gas pedal! Just don't take him too seriously... he loves to joke and to take you on a ride.", "fun": "He loves cards, games, rivers, foldings and queens of hearts." } },
+        "lau": { "type": "member", "settings": { "image": "shopify://shop_images/LAU-1-1.jpg", "name": "Lau", "bio": "Lau is the original founder of Walang Problema. She also arrived in El Nido back in 2014; we are all from the same batch. But Lau is the one with the most energy in the late hours, always perfectly tanned, and with a heavy Spanish accent. Lau has also made El Nido her home. She is a computer engineer by education, but in El Nido she has been working in the organization of tours and other tourist related business. She founded Lula Boutique Palawan and currently owns the restaurant-bar Tuko El Nido. Whatever Lau does, comes from the heart. She is a non stop woman, always ready for a challenge.", "fun": "Everybody is going to Mexico next year to celebrate her birthday." } }
+      },
+      "block_order": ["pauline", "xavier", "lau"],
+      "settings": {
+        "kicker": "Walang Problema",
+        "heading": "Team",
+        "text": "We love to play and provoke, and make people laugh. And that's the attitude we all have. As a young and international group of colleagues, we support each other, try to improve together, and make sure we enjoy and have fun doing our job."
+      }
+    },
+    "cta": { "type": "wp-cta", "settings": { "heading": "Ready for island life?", "button_label": "Shop the collection", "button_link": "shopify://collections/all", "button2_label": "Get in touch", "button2_link": "shopify://pages/contact" } }
+  },
+  "order": ["hero", "intro", "quote", "team", "cta"]
+}

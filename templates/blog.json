@@ -1,0 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": { "type": "wp-page-banner", "settings": { "kicker": "El Nido Times", "heading": "", "text": "" } },
+    "main": { "type": "wp-blog", "settings": { "per_page": 12, "read_more": "Read the story", "fallback_label": "El Nido Times" } }
+  },
+  "order": ["banner", "main"]
+}
