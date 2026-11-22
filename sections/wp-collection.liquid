@@ -1,5 +1,14 @@
 {%- paginate collection.products by section.settings.per_page -%}
+{%- assign swatch_colors = 'black=#1B2421|white=#FFFFFF|army green=#4B5A3A|military green=#4B5A3A|green=#2E7D4F|mint green=#9ED9BE|light blue=#A9CDE8|sky blue=#8EC9EA|blue=#2F6DB5|royal blue=#2648A0|navy blue=#1F2E4F|turquoise=#2BB3B1|pink=#F2A7C0|light pink=#F7D3DE|dark pink=#D9547F|coral=#F07C66|red=#C8352E|rusty red=#A4492F|maroon=#6E2233|orange=#EE8A36|yellow=#F4CE4A|violet=#8A6FBF|grey=#8C8C8C|light grey=#C9C9C9|brown=#7A5136|beige=#E3D3B5|sand=#D8C39A|cream=#F3E9D2|khaki=#BDB48A|white pink=linear-gradient(135deg,#FFFFFF 50%,#F2A7C0 50%)|white army green=linear-gradient(135deg,#FFFFFF 50%,#4B5A3A 50%)' | split: '|' -%}
 <section class="wp-s wp-coll" {{ section.shopify_attributes }}>
+  <nav class="wp-chips" aria-label="{{ section.settings.category_heading | escape }}">
+    <a href="{{ routes.all_products_collection_url }}" class="wp-chip"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>All</a>
+    {%- for link in linklists[section.settings.category_menu].links -%}
+      {%- if link.type == 'collection_link' -%}
+        <a href="{{ link.url }}" class="wp-chip"{% if link.object.handle == collection.handle %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+  </nav>
   <aside class="wp-coll__aside" aria-label="Filters">
     {%- liquid
       assign active_count = 0
@@ -9,15 +18,6 @@
     -%}
     <details class="wp-fdet" open data-wp-fdet>
     <summary class="wp-fdet__sum">Filters{% if active_count > 0 %} ({{ active_count }}){% endif %}</summary>
-    <fieldset class="wp-fset">
-      <legend>{{ section.settings.category_heading | escape }}</legend>
-      <a href="{{ routes.all_products_collection_url }}" class="wp-check"><span class="wp-check__box"{% if collection.handle == 'all' %} data-on{% endif %}></span> All</a>
-      {%- for link in linklists[section.settings.category_menu].links -%}
-        {%- if link.type == 'collection_link' -%}
-          <a href="{{ link.url }}" class="wp-check"><span class="wp-check__box"{% if link.object.handle == collection.handle %} data-on{% endif %}></span> {{ link.title | escape }}</a>
-        {%- endif -%}
-      {%- endfor -%}
-    </fieldset>
     <form id="wp-filters" method="get" action="{{ collection.url }}">
       {%- if collection.sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{%- endif -%}
       {%- for filter in collection.filters -%}
@@ -30,12 +30,38 @@
               <input type="number" name="{{ filter.max_value.param_name }}" value="{% if filter.max_value.value %}{{ filter.max_value.value | money_without_currency | replace: ',', '' }}{% endif %}" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}" min="0" aria-label="Maximum price" data-wp-autosubmit>
             </div>
           {%- else -%}
+            {%- assign fl = filter.label | downcase -%}
+            {%- if fl == 'size' -%}
+              <div class="wp-fchips">
+              {%- for value in filter.values -%}
+                <label class="wp-fchip{% if value.count == 0 and value.active == false %} is-off{% endif %}">
+                  <input type="checkbox" class="wp-hidebox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} data-wp-autosubmit>
+                  <span>{{ value.label | escape }}</span>
+                </label>
+              {%- endfor -%}
+              </div>
+            {%- elsif fl == 'color' or fl == 'colour' -%}
+              <div class="wp-fswatches">
+              {%- for value in filter.values -%}
+                {%- assign vkey = value.label | downcase | strip -%}
+                {%- assign sw = '#CDBFA6' -%}
+                {%- if value.swatch.color -%}{%- assign sw = value.swatch.color -%}{%- endif -%}
+                {%- for pair in swatch_colors -%}{%- assign kv = pair | split: '=' -%}{%- if kv[0] == vkey -%}{%- assign sw = kv[1] -%}{%- endif -%}{%- endfor -%}
+                <label class="wp-fswatch{% if value.count == 0 and value.active == false %} is-off{% endif %}">
+                  <input type="checkbox" class="wp-hidebox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} data-wp-autosubmit>
+                  <span class="wp-fswatch__dot" style="background: {{ sw }}"></span>
+                  <span class="wp-fswatch__name">{{ value.label | escape }}</span>
+                </label>
+              {%- endfor -%}
+              </div>
+            {%- else -%}
             {%- for value in filter.values -%}
               <label class="wp-check">
                 <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} data-wp-autosubmit>
                 {{ value.label | escape }}
               </label>
             {%- endfor -%}
+            {%- endif -%}
           {%- endif -%}
         </fieldset>
       {%- endfor -%}
@@ -45,7 +71,7 @@
   </aside>
   <div class="wp-coll__main">
     <div class="wp-coll__bar">
-      <span class="wp-coll__count">Showing {{ paginate.items }} {% if paginate.items == 1 %}product{% else %}products{% endif %}</span>
+      <span class="wp-coll__count"><span class="wp-hand wp-coll__num">{{ paginate.items }}</span> {% if paginate.items == 1 %}piece{% else %}pieces{% endif %} of island life</span>
       <label class="wp-sort">Sort by
         <select name="sort_by" form="wp-filters" data-wp-autosubmit>
           {%- for option in collection.sort_options -%}
@@ -58,6 +84,19 @@
       <div class="wp-grid wp-grid--shop">
         {%- for product in collection.products -%}
           {% render 'wp-product-card', product: product, index: forloop.index0 %}
+          {%- if forloop.index == 6 and paginate.current_page == 1 and forloop.length > 6 and section.settings.tile_heading != blank -%}
+            <a href="{{ section.settings.tile_link | default: routes.root_url }}" class="wp-island">
+              <span class="wp-island__sun" aria-hidden="true"></span>
+              {% render 'wp-palm', class: 'wp-palm wp-island__palm', color: '#0E4D4F' %}
+              <svg viewBox="0 0 400 80" preserveAspectRatio="none" class="wp-island__sea" aria-hidden="true"><path d="M0 30 C70 10 130 50 200 30 C270 10 330 50 400 30 L400 80 L0 80 Z" fill="#0E4D4F" opacity=".45"></path><path d="M0 52 C70 36 130 68 200 52 C270 36 330 68 400 52 L400 80 L0 80 Z" fill="#0E4D4F" opacity=".7"></path></svg>
+              <span class="wp-island__copy">
+                {%- if section.settings.tile_kicker != blank -%}<span class="wp-hand wp-island__kicker">{{ section.settings.tile_kicker | escape }}</span>{%- endif -%}
+                <span class="wp-hd wp-island__title">{{ section.settings.tile_heading | escape }}</span>
+                {%- if section.settings.tile_text != blank -%}<span class="wp-island__text">{{ section.settings.tile_text | escape }}</span>{%- endif -%}
+                {%- if section.settings.tile_label != blank -%}<span class="wp-btn wp-btn--gold wp-island__btn">{{ section.settings.tile_label | escape }}</span>{%- endif -%}
+              </span>
+            </a>
+          {%- endif -%}
         {%- endfor -%}
       </div>
       {%- if paginate.pages > 1 -%}
@@ -71,7 +110,12 @@
         </nav>
       {%- endif -%}
     {%- else -%}
-      <p class="wp-empty">No products found in this collection yet.</p>
+      <div class="wp-empty">
+        <p class="wp-hand wp-empty__kicker">Walang problema</p>
+        <p class="wp-hd wp-empty__title">The tide is out on this one.</p>
+        <p class="wp-empty__text">Nothing here right now. Try fewer filters, or browse everything.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="wp-btn wp-btn--primary">Shop all</a>
+      </div>
     {%- endif -%}
   </div>
 </section>
@@ -82,7 +126,13 @@
   "settings": [
     { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 48, "step": 6, "default": 12 },
     { "type": "text", "id": "category_heading", "label": "Category heading", "default": "Category" },
-    { "type": "link_list", "id": "category_menu", "label": "Category menu (collection links are shown)", "default": "main-menu" }
+    { "type": "link_list", "id": "category_menu", "label": "Category menu (collection links are shown)", "default": "main-menu" },
+    { "type": "header", "content": "Island break strip (after the 6th product, page 1)" },
+    { "type": "text", "id": "tile_kicker", "label": "Handwritten line", "default": "Born in El Nido" },
+    { "type": "text", "id": "tile_heading", "label": "Heading (empty hides the tile)", "default": "Island life, zero stress" },
+    { "type": "textarea", "id": "tile_text", "label": "Text", "default": "Dreamed up between island hops in Palawan. Made for slow mornings, salty air and good company." },
+    { "type": "text", "id": "tile_label", "label": "Button label", "default": "Our story" },
+    { "type": "url", "id": "tile_link", "label": "Link" }
   ]
 }
 {% endschema %}

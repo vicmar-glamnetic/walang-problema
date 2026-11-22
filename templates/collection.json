@@ -9,8 +9,8 @@
  */
 {
   "sections": {
-    "banner": { "type": "wp-page-banner", "settings": { "text": "Tees, caps, bags and beach gear for the island in you." } },
-    "main": { "type": "wp-collection", "settings": { "per_page": 12, "category_heading": "Category", "category_menu": "main-menu" } },
+    "banner": { "type": "wp-page-banner", "settings": { "kicker": "Fresh from El Nido", "text": "Tees, caps, bags and beach gear for the island in you." } },
+    "main": { "type": "wp-collection", "settings": { "per_page": 12, "category_heading": "Category", "category_menu": "main-menu", "tile_kicker": "Born in El Nido", "tile_heading": "Island life, zero stress", "tile_text": "Dreamed up between island hops in Palawan. Made for slow mornings, salty air and good company.", "tile_label": "Our story", "tile_link": "shopify://pages/our-story" } },
     "newsletter": { "type": "wp-newsletter", "settings": {} }
   },
   "order": ["banner", "main", "newsletter"]
