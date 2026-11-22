@@ -493,3 +493,16 @@ body{margin:0;background:#F4EBDD}
 .wp-coll .wp-grid--shop{grid-template-columns:repeat(4,minmax(0,1fr));gap:32px 24px}
 .wp-banner--wide .wp-banner__sun{right:max(40px,calc(50% - 700px))}
 }
+/* collection: aligned card buttons */
+.wp-coll .wp-card{height:100%}
+.wp-coll .wp-card__info{flex:1 1 auto;align-items:flex-start}
+.wp-coll .wp-card form{margin-top:auto}
+.wp-coll .wp-card__btn{box-sizing:border-box;width:100%;min-height:48px;margin:0;padding:0 16px;gap:8px;border:2px solid #0E4D4F;border-radius:999px;background:#fff;color:#0E4D4F;font:600 15px Inter,sans-serif;line-height:1;transition:background .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease}
+.wp-coll .wp-card__btn::after{content:"";width:16px;height:6px;flex:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 6'%3E%3Cpath d='M0 3 C2.7 0 5.3 6 8 3 C10.7 0 13.3 6 16 3' fill='none' stroke='%232A8C8C' stroke-width='2'/%3E%3C/svg%3E") no-repeat center}
+.wp-coll .wp-card__btn:not([disabled]):hover,.wp-coll .wp-card__btn:not([disabled]):focus-visible{background:#0E4D4F;color:#fff;transform:translateY(-2px) rotate(-1deg);box-shadow:0 8px 18px rgba(14,77,79,.22)}
+.wp-coll .wp-card__btn:not([disabled]):hover::after,.wp-coll .wp-card__btn:not([disabled]):focus-visible::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 6'%3E%3Cpath d='M0 3 C2.7 0 5.3 6 8 3 C10.7 0 13.3 6 16 3' fill='none' stroke='%23F7C873' stroke-width='2'/%3E%3C/svg%3E")}
+.wp-coll .wp-card__btn:focus-visible{outline:2px solid #C2522B;outline-offset:2px}
+.wp-coll .wp-card__btn[disabled]{background:#F4EBDD;border-color:#CDBFA6;color:#5B6560;opacity:1}
+.wp-coll .wp-card__btn[disabled]::after{display:none}
+@media(prefers-reduced-motion:reduce){.wp-coll .wp-card__btn{transition:none}}
+@media(max-width:640px){.wp-coll .wp-card__btn{min-height:42px;font-size:14px;padding:0 10px}.wp-coll .wp-card__btn::after{display:none}}
