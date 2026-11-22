@@ -1,4 +1,5 @@
 <section class="wp-s wp-banner wp-banner--article" {{ section.shopify_attributes }}>
+  {% render 'wp-banner-deco' %}
   <div class="wp-banner__in">
     <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / <a href="{{ blog.url }}">{{ blog.title | escape }}</a> / {{ article.title | escape }}</nav>
     {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-banner__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
@@ -9,6 +10,11 @@
 </section>
 <section class="wp-s wp-prose-wrap">
   <div class="wp-prose">
+    {%- if article.image -%}
+      <figure class="wp-polaroid wp-polaroid--article" style="max-width: {{ article.image.width | plus: 28 }}px">
+        {{ article.image | image_url: width: 1400 | image_tag: loading: 'eager', widths: '500, 800, 1100, 1400', sizes: '(min-width: 900px) 720px, 90vw', alt: article.image.alt | default: article.title }}
+      </figure>
+    {%- endif -%}
     {{ article.content }}
     <p class="wp-article__back"><a href="{{ blog.url }}" class="wp-btn wp-btn--ghost">{{ section.settings.back_label | escape }}</a></p>
   </div>

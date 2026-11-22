@@ -8,7 +8,10 @@
           {%- if article.image -%}
             {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '', sizes: '(min-width: 1000px) 400px, 100vw' }}
           {%- else -%}
-            <span class="wp-hand">{{ section.settings.fallback_label | escape }}</span>
+            <span class="wp-post__sun"></span>
+            {% render 'wp-palm', class: 'wp-palm wp-post__palm', color: '#1B2421' %}
+            <svg viewBox="0 0 400 60" preserveAspectRatio="none" class="wp-post__sea" aria-hidden="true"><path d="M0 24 C70 6 130 42 200 24 C270 6 330 42 400 24 L400 60 L0 60 Z" fill="#F4EBDD" opacity=".35"></path><path d="M0 40 C70 26 130 54 200 40 C270 26 330 54 400 40 L400 60 L0 60 Z" fill="#F4EBDD" opacity=".5"></path></svg>
+            <span class="wp-hand wp-post__label">{{ section.settings.fallback_label | escape }}</span>
           {%- endif -%}
         </a>
         <p class="wp-post__date">{{ article.published_at | date: '%B %-d, %Y' }}</p>

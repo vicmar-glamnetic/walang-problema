@@ -17,6 +17,7 @@
   endif
 -%}
 <section class="wp-s wp-banner" {{ section.shopify_attributes }}>
+  {% render 'wp-banner-deco' %}
   <div class="wp-banner__in">
     <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / {{ crumb_label | escape }}</nav>
     {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-banner__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
