@@ -19,7 +19,12 @@
         "button_label": "Shop New Arrivals",
         "button_link": "shopify://collections/all",
         "button2_label": "Beach Essentials",
-        "button2_link": "shopify://collections/beach-essentials"
+        "button2_link": "shopify://collections/beach-essentials",
+        "image": "shopify://shop_images/Artboard-1-copy-4.jpg",
+        "image_caption": "The island crew",
+        "image_2": "shopify://shop_images/walangproblema_headerteam.jpg",
+        "sticker": "From El Nido with love",
+        "wave_color": "#0E4D4F"
       }
     },
     "strip": {
@@ -36,11 +41,11 @@
     "categories": {
       "type": "wp-categories",
       "blocks": {
-        "t1": { "type": "tile", "settings": { "title": "Men", "link": "shopify://collections/men", "icon": "men", "bg": "#2A8C8C", "fg": "#FFFFFF" } },
-        "t2": { "type": "tile", "settings": { "title": "Women", "link": "shopify://collections/women", "icon": "women", "bg": "#C2522B", "fg": "#FFFFFF" } },
-        "t3": { "type": "tile", "settings": { "title": "Kids", "link": "shopify://collections/kids", "icon": "kids", "bg": "#F7C873", "fg": "#1B2421" } },
-        "t4": { "type": "tile", "settings": { "title": "Accessories", "link": "shopify://collections/accessories", "icon": "accessories", "bg": "#4B5A3A", "fg": "#FFFFFF" } },
-        "t5": { "type": "tile", "settings": { "title": "Beach Essentials", "link": "shopify://collections/beach-essentials", "icon": "beach", "bg": "#0E4D4F", "fg": "#FFFFFF" } }
+        "t1": { "type": "tile", "settings": { "image": "shopify://shop_images/Men-small-grid-2-1.jpg", "title": "Men", "link": "shopify://collections/men", "icon": "men", "bg": "#2A8C8C", "fg": "#FFFFFF" } },
+        "t2": { "type": "tile", "settings": { "image": "shopify://shop_images/WOMEN-THUMBNAIL.jpg", "title": "Women", "link": "shopify://collections/women", "icon": "women", "bg": "#C2522B", "fg": "#FFFFFF" } },
+        "t3": { "type": "tile", "settings": { "image": "shopify://shop_images/KIDS-Turtle-Light-Blue-1.jpg", "title": "Kids", "link": "shopify://collections/kids", "icon": "kids", "bg": "#F7C873", "fg": "#1B2421" } },
+        "t4": { "type": "tile", "settings": { "image": "shopify://shop_images/Accessories-small-grid.jpg", "title": "Accessories", "link": "shopify://collections/accessories", "icon": "accessories", "bg": "#4B5A3A", "fg": "#FFFFFF" } },
+        "t5": { "type": "tile", "settings": { "image": "shopify://shop_images/Hoodie-Towel-TURQUOISE-2.jpg", "title": "Beach Essentials", "link": "shopify://collections/beach-essentials", "icon": "beach", "bg": "#0E4D4F", "fg": "#FFFFFF" } }
       },
       "block_order": ["t1", "t2", "t3", "t4", "t5"],
       "settings": { "heading": "Shop the island", "link_label": "View all products", "link": "shopify://collections/all" }
@@ -56,20 +61,21 @@
         "title": "Less stress.\nMore sunshine.",
         "text": "Walang Problema is more than a shirt. It is a way of living: slow down, be happy and live life to the fullest, wherever your island is.",
         "button_label": "Read our story",
-        "button_link": "shopify://pages/our-story"
+        "button_link": "shopify://pages/our-story",
+        "image": "shopify://shop_images/slider-Main-b-pink.jpg"
       }
     },
     "community": {
       "type": "wp-community",
       "blocks": {
-        "c1": { "type": "tile", "settings": { "label": "Customer photo", "bg": "#F7C873", "fg": "#1B2421" } },
-        "c2": { "type": "tile", "settings": { "label": "Beach lifestyle shot", "bg": "#2A8C8C", "fg": "#FFFFFF" } },
-        "c3": { "type": "tile", "settings": { "label": "Product flat lay", "bg": "#C2522B", "fg": "#FFFFFF" } },
-        "c4": { "type": "tile", "settings": { "label": "Palawan travel post", "bg": "#4B5A3A", "fg": "#FFFFFF" } },
-        "c5": { "type": "tile", "settings": { "label": "Customer photo", "bg": "#E6D9C2", "fg": "#1B2421" } }
+        "c1": { "type": "tile", "settings": { "image": "shopify://shop_images/Kayak-T-shirt-ARMY-GREEN-1.jpg", "label": "Kayak tee and a pineapple", "bg": "#F7C873", "fg": "#1B2421" } },
+        "c2": { "type": "tile", "settings": { "image": "shopify://shop_images/REVERSIBLE-PLAIN-HAT-BLACK-1_29e21275-d7a1-4424-b496-ac814f9d62fb.webp", "label": "Reversible bucket hat smiles", "bg": "#2A8C8C", "fg": "#FFFFFF" } },
+        "c3": { "type": "tile", "settings": { "image": "shopify://shop_images/Kids-Palm-Tree-Army-Green-2.jpg", "label": "Little islander with a surfboard", "bg": "#C2522B", "fg": "#FFFFFF" } },
+        "c4": { "type": "tile", "settings": { "image": "shopify://shop_images/KIDS-Turtle-Army-green-1.jpg", "label": "Pineapple shades, turtle tee", "bg": "#4B5A3A", "fg": "#FFFFFF" } },
+        "c5": { "type": "tile", "settings": { "image": "shopify://shop_images/GOOD-VIBES-ONLY-BLACK-4.webp", "label": "Good vibes only", "bg": "#E6D9C2", "fg": "#1B2421" } }
       },
       "block_order": ["c1", "c2", "c3", "c4", "c5"],
-      "settings": { "heading": "#WalangProblema", "link_label": "Follow us on Instagram and Facebook" }
+      "settings": { "heading": "#WalangProblema", "link_label": "Follow us on Instagram", "link": "https://www.instagram.com/walangproblemabrand/" }
     },
     "newsletter": {
       "type": "wp-newsletter",

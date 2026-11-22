@@ -1,4 +1,6 @@
 <section class="wp-s wp-news" {{ section.shopify_attributes }}>
+  {% render 'wp-palm', class: 'wp-palm wp-palm--news-l', color: '#4B5A3A' %}
+  {% render 'wp-palm', class: 'wp-palm wp-palm--news-r', color: '#0E4D4F' %}
   <div class="wp-news__in">
     <div class="wp-news__copy">
       <h2 class="wp-hd wp-news__title">{{ section.settings.heading | escape }}</h2>

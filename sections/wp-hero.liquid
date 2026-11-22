@@ -1,5 +1,5 @@
-<section class="wp-s wp-hero{% if section.settings.variant == 'story' %} wp-hero--story{% endif %}" id="top" {{ section.shopify_attributes }}>
-  {%- if section.settings.variant == 'story' -%}
+<section class="wp-s wp-hero{% if section.settings.variant == 'story' %} wp-hero--story{% endif %}{% if section.settings.image != blank and section.settings.variant != 'story' %} wp-hero--photo{% endif %}" id="top" {{ section.shopify_attributes }}>
+  {%- if section.settings.variant == 'story' or section.settings.image != blank -%}
     {% render 'wp-palm', class: 'wp-palm wp-palm--hero-l', color: '#4B5A3A' %}
     {% render 'wp-palm', class: 'wp-palm wp-palm--hero-r', color: '#0E4D4F' %}
   {%- endif -%}
@@ -19,13 +19,17 @@
       {%- endif -%}
     </div>
     <div class="wp-hero__art">
-      {%- if section.settings.image != blank and section.settings.variant == 'story' -%}
+      {%- if section.settings.image != blank -%}
+        {%- if section.settings.image_2 != blank -%}
+          <figure class="wp-polaroid wp-polaroid--back" aria-hidden="true">
+            {{ section.settings.image_2 | image_url: width: 700 | image_tag: loading: 'eager', widths: '300, 500, 700', sizes: '(min-width: 1000px) 300px, 45vw', alt: '' }}
+          </figure>
+        {%- endif -%}
+        {%- if section.settings.sticker != blank -%}<span class="wp-sticker wp-hand">{{ section.settings.sticker | escape }}</span>{%- endif -%}
         <figure class="wp-polaroid">
-          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', widths: '400, 600, 900, 1200', sizes: '(min-width: 1000px) 520px, 90vw', alt: section.settings.image.alt | default: section.settings.image_caption }}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', widths: '400, 600, 900, 1200', sizes: '(min-width: 1000px) 640px, 90vw', alt: section.settings.image.alt | default: section.settings.image_caption }}
           {%- if section.settings.image_caption != blank -%}<figcaption class="wp-hand wp-polaroid__cap">{{ section.settings.image_caption | escape }}</figcaption>{%- endif -%}
         </figure>
-      {%- elsif section.settings.image != blank -%}
-        {{ section.settings.image | image_url: width: 1280 | image_tag: loading: 'eager', widths: '640, 960, 1280', sizes: '(min-width: 1280px) 600px, 100vw' }}
       {%- elsif section.settings.variant == 'story' -%}
         {% render 'wp-art-story' %}
       {%- else -%}
@@ -33,8 +37,8 @@
       {%- endif -%}
     </div>
   </div>
-  {%- if section.settings.variant == 'story' -%}
-    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+  {%- if section.settings.variant == 'story' or section.settings.image != blank -%}
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="{{ section.settings.wave_color | default: '#F4EBDD' }}"></path></svg>
   {%- endif -%}
 </section>
 {% schema %}
@@ -50,7 +54,10 @@
     { "type": "text", "id": "button2_label", "label": "Button 2 label", "default": "Beach Essentials" },
     { "type": "url", "id": "button2_link", "label": "Button 2 link" },
     { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" },
-    { "type": "text", "id": "image_caption", "label": "Photo caption (handwritten, Our Story layout only)" }
+    { "type": "text", "id": "image_caption", "label": "Photo caption (handwritten)" },
+    { "type": "image_picker", "id": "image_2", "label": "Second photo (small, tucked behind)" },
+    { "type": "text", "id": "sticker", "label": "Round sticker text" },
+    { "type": "color", "id": "wave_color", "label": "Wave color (match the next section)", "default": "#F4EBDD" }
   ],
   "presets": [{ "name": "WP Hero" }]
 }

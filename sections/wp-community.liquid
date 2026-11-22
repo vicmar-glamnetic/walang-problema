@@ -5,8 +5,8 @@
   </div>
   <div class="wp-comm__grid">
     {%- for block in section.blocks -%}
-      <div class="wp-tile" style="background: {{ block.settings.bg }}; color: {{ block.settings.fg }}" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: block.settings.label }}{%- else -%}<span>{{ block.settings.label | escape }}</span>{%- endif -%}
+      <div class="wp-tile{% if block.settings.image != blank %} wp-tile--photo{% endif %}" style="background: {{ block.settings.bg }}; color: {{ block.settings.fg }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '300, 500, 700', sizes: '(min-width: 1200px) 300px, 50vw', alt: block.settings.label }}{%- else -%}<span>{{ block.settings.label | escape }}</span>{%- endif -%}
       </div>
     {%- endfor -%}
   </div>
@@ -23,7 +23,7 @@
     "type": "tile", "name": "Tile",
     "settings": [
       { "type": "image_picker", "id": "image", "label": "Photo" },
-      { "type": "text", "id": "label", "label": "Placeholder label", "default": "Customer photo" },
+      { "type": "text", "id": "label", "label": "Label (shown when there is no photo, used as alt text when there is)", "default": "Customer photo" },
       { "type": "color", "id": "bg", "label": "Background", "default": "#F7C873" },
       { "type": "color", "id": "fg", "label": "Text", "default": "#1B2421" }
     ]

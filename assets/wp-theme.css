@@ -516,3 +516,86 @@ body{margin:0;background:#F4EBDD}
 .wp-coll .wp-sort select:focus-visible{outline:2px solid #C2522B;outline-offset:2px}
 .wp-coll .wp-sort select::-ms-expand{display:none}
 @media(prefers-reduced-motion:reduce){.wp-coll .wp-sort select{transition:none}}
+/* homepage: tropical photo layer */
+.wp-hero--photo .wp-hero__in{position:relative;z-index:1;align-items:center;padding-bottom:88px}
+.wp-hero--photo .wp-hero__copy{padding-bottom:24px}
+.wp-hero--photo .wp-hero__art{position:relative;display:flex;justify-content:center;padding:32px 0 40px}
+.wp-hero--photo .wp-hero__art::before{content:"";position:absolute;width:56%;aspect-ratio:1;top:-2%;right:0;border-radius:50%;background:#C2522B;opacity:.9}
+.wp-hero--photo .wp-polaroid{max-width:640px}
+.wp-hero--photo .wp-polaroid img{aspect-ratio:auto}
+.wp-polaroid--back{position:absolute;z-index:0;width:46%;max-width:300px;left:-2%;bottom:0;transform:rotate(-7deg);padding:10px 10px 28px}
+.wp-polaroid--back img{aspect-ratio:4/3;object-fit:cover}
+.wp-hero--photo .wp-polaroid:not(.wp-polaroid--back){margin-left:10%}
+.wp-sticker{position:absolute;z-index:2;right:2%;top:6px;width:118px;height:118px;border-radius:50%;background:#F7C873;color:#0E4D4F;display:flex;align-items:center;justify-content:center;text-align:center;font-size:22px;line-height:1.05;padding:14px;box-sizing:border-box;transform:rotate(12deg);box-shadow:0 8px 20px rgba(27,36,33,.2);border:3px dashed #0E4D4F}
+.wp-strip__in > span{display:inline-flex;align-items:center;gap:10px}
+.wp-strip__in > span::before{content:"";width:12px;height:12px;border-radius:50%;background:#F7C873;box-shadow:0 0 0 4px rgba(247,200,115,.25)}
+.wp-cat{transition:transform .25s ease,box-shadow .25s ease}
+.wp-cat:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:0 14px 30px rgba(27,36,33,.16)}
+.wp-cats__grid > .wp-cat:nth-child(2n):hover{transform:translateY(-4px) rotate(1deg)}
+.wp-cat--photo{padding:12px 12px 18px;gap:14px;justify-content:flex-start}
+.wp-cat__photo{display:block;position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#fff}
+.wp-cat__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .4s ease}
+.wp-cat--photo:hover .wp-cat__photo img{transform:scale(1.05)}
+.wp-cat--photo .wp-cat__name{padding:0 8px;font-size:24px}
+.wp-story__copy{position:relative;overflow:hidden}
+.wp-story__copy > :not(.wp-palm){position:relative;z-index:1}
+.wp-palm--story{width:240px;left:-60px;bottom:-60px;opacity:.5;transform:scaleX(-1)}
+.wp-story__art img{object-position:center}
+.wp-comm__grid{gap:20px;padding-top:12px}
+.wp-tile--photo{background:#fff!important;padding:10px 10px 10px;box-shadow:0 10px 24px rgba(27,36,33,.1);transform:rotate(-2deg);transition:transform .25s ease;overflow:visible}
+.wp-tile--photo:nth-child(2n){transform:rotate(2deg)}
+.wp-tile--photo:nth-child(3n){transform:rotate(-1deg)}
+.wp-tile--photo:hover{transform:rotate(0) translateY(-4px)}
+.wp-tile--photo img{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);border-radius:10px;object-fit:cover}
+.wp-tile--photo::before{content:"";position:absolute;z-index:1;top:-10px;left:50%;width:70px;height:20px;margin-left:-35px;background:#F7C873;opacity:.9;border-radius:3px;transform:rotate(-4deg)}
+.wp-tile--photo:nth-child(2n)::before{background:#2A8C8C;opacity:.75}
+.wp-tile--photo:nth-child(3n)::before{background:#C2522B;opacity:.75}
+.wp-news{position:relative;overflow:hidden}
+.wp-news__in{position:relative;z-index:1}
+.wp-palm--news-l{width:220px;left:-50px;bottom:-60px;opacity:.25;transform:scaleX(-1)}
+.wp-palm--news-r{width:200px;right:-40px;top:-60px;opacity:.18;transform:rotate(180deg)}
+@media(prefers-reduced-motion:reduce){.wp-cat,.wp-cat__photo img,.wp-tile--photo{transition:none}}
+@media(max-width:900px){
+.wp-hero--photo .wp-hero__in{padding-top:48px}
+.wp-hero--photo .wp-hero__art{flex-basis:100%}
+}
+@media(max-width:640px){
+.wp-hero--photo .wp-hero__in{padding-bottom:64px;gap:16px}
+.wp-hero--photo .wp-polaroid:not(.wp-polaroid--back){margin-left:6%}
+.wp-polaroid--back{width:44%;padding:6px 6px 18px}
+.wp-sticker{width:84px;height:84px;font-size:16px;padding:8px;right:0;top:0}
+.wp-cat--photo{padding:8px 8px 12px;gap:10px;min-height:0}
+.wp-cat--photo .wp-cat__name{font-size:18px;padding:0 4px}
+.wp-tile--photo{padding:6px}
+.wp-tile--photo img{inset:6px;width:calc(100% - 12px);height:calc(100% - 12px)}
+.wp-palm--story{width:160px}
+}
+.wp-island--card{min-height:0;height:100%;flex-direction:column;justify-content:flex-start;padding:36px 32px 90px;border-radius:20px}
+.wp-island--card .wp-island__sun{width:120px;height:120px;top:auto;bottom:60px;right:12%}
+.wp-island--card .wp-island__palm{width:200px}
+.wp-island--card .wp-island__title{font-size:32px}
+@media(max-width:640px){.wp-island--card{padding:24px 20px 80px}.wp-island--card .wp-island__title{font-size:24px}.wp-island--card .wp-island__sun{width:80px;height:80px}}
+/* homepage + related: aligned card buttons (same as collection) */
+:is(.wp-best,.wp-rel) .wp-card{height:100%}
+:is(.wp-best,.wp-rel) .wp-card__info{flex:1 1 auto;align-items:flex-start}
+:is(.wp-best,.wp-rel) .wp-card form{margin-top:auto}
+:is(.wp-best,.wp-rel) .wp-card__btn{box-sizing:border-box;width:100%;min-height:48px;margin:0;padding:0 16px;gap:8px;border:2px solid #0E4D4F;border-radius:999px;background:#fff;color:#0E4D4F;font:600 15px Inter,sans-serif;line-height:1;transition:background .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease}
+:is(.wp-best,.wp-rel) .wp-card__btn::after{content:"";width:16px;height:6px;flex:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 6'%3E%3Cpath d='M0 3 C2.7 0 5.3 6 8 3 C10.7 0 13.3 6 16 3' fill='none' stroke='%232A8C8C' stroke-width='2'/%3E%3C/svg%3E") no-repeat center}
+:is(.wp-best,.wp-rel) .wp-card__btn:not([disabled]):hover,:is(.wp-best,.wp-rel) .wp-card__btn:not([disabled]):focus-visible{background:#0E4D4F;color:#fff;transform:translateY(-2px) rotate(-1deg);box-shadow:0 8px 18px rgba(14,77,79,.22)}
+:is(.wp-best,.wp-rel) .wp-card__btn:focus-visible{outline:2px solid #C2522B;outline-offset:2px}
+:is(.wp-best,.wp-rel) .wp-card__btn[disabled]{background:#F4EBDD;border-color:#CDBFA6;color:#5B6560;opacity:1}
+:is(.wp-best,.wp-rel) .wp-card__btn[disabled]::after{display:none}
+:is(.wp-best,.wp-rel) .wp-badge{transform:rotate(-6deg);box-shadow:0 3px 8px rgba(27,36,33,.18)}
+@media(prefers-reduced-motion:reduce){:is(.wp-best,.wp-rel) .wp-card__btn{transition:none}}
+/* hero sticker sits on the caption corner, away from faces */
+.wp-sticker{top:auto;bottom:6px;right:0}
+@media(max-width:640px){
+:is(.wp-best,.wp-rel) .wp-card__btn{min-height:42px;font-size:14px;padding:0 10px}
+:is(.wp-best,.wp-rel) .wp-card__btn::after{display:none}
+.wp-sticker{bottom:0;right:-4px}
+.wp-cats__grid > .wp-cat--photo:last-child:nth-child(odd){grid-column:1/-1}
+.wp-cats__grid > .wp-cat--photo:last-child:nth-child(odd) .wp-cat__photo{aspect-ratio:16/9}
+.wp-comm__grid > .wp-tile:nth-child(5):last-child{display:none}
+.wp-island--card .wp-island__sun{width:64px;height:64px;bottom:44px;right:-8px}
+.wp-island--card .wp-island__palm{width:130px}
+}
