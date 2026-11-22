@@ -9,7 +9,7 @@
       <article class="wp-member" {{ block.shopify_attributes }}>
         <div class="wp-member__photo">
           {%- if block.settings.image != blank -%}
-            {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.name, sizes: '(min-width: 1000px) 400px, 100vw' }}
+            {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.name, widths: '400, 600, 800', sizes: '(min-width: 1000px) 380px, 90vw' }}
           {%- endif -%}
         </div>
         <h3 class="wp-hd wp-member__name">{{ block.settings.name | escape }}</h3>

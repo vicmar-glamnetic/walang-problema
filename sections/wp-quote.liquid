@@ -1,8 +1,11 @@
 <section class="wp-s wp-quote" {{ section.shopify_attributes }}>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave wp-wave--top" aria-hidden="true"><path d="M0 30 C240 60 480 0 720 30 C960 60 1200 0 1440 30 L1440 0 L0 0 Z" fill="#F4EBDD"></path></svg>
+  {% render 'wp-palm', class: 'wp-palm wp-palm--quote', color: '#0E4D4F' %}
   <figure class="wp-quote__in">
     <blockquote class="wp-hd wp-quote__text">{{ section.settings.quote | escape }}</blockquote>
     {%- if section.settings.author != blank -%}<figcaption class="wp-hand wp-quote__by">{{ section.settings.author | escape }}</figcaption>{%- endif -%}
   </figure>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
 </section>
 {% schema %}
 {

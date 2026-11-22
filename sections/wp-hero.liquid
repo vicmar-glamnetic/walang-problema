@@ -1,4 +1,8 @@
 <section class="wp-s wp-hero{% if section.settings.variant == 'story' %} wp-hero--story{% endif %}" id="top" {{ section.shopify_attributes }}>
+  {%- if section.settings.variant == 'story' -%}
+    {% render 'wp-palm', class: 'wp-palm wp-palm--hero-l', color: '#4B5A3A' %}
+    {% render 'wp-palm', class: 'wp-palm wp-palm--hero-r', color: '#0E4D4F' %}
+  {%- endif -%}
   <div class="wp-hero__in">
     <div class="wp-hero__copy">
       {%- if section.settings.variant == 'story' -%}
@@ -15,7 +19,12 @@
       {%- endif -%}
     </div>
     <div class="wp-hero__art">
-      {%- if section.settings.image != blank -%}
+      {%- if section.settings.image != blank and section.settings.variant == 'story' -%}
+        <figure class="wp-polaroid">
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', widths: '400, 600, 900, 1200', sizes: '(min-width: 1000px) 520px, 90vw', alt: section.settings.image.alt | default: section.settings.image_caption }}
+          {%- if section.settings.image_caption != blank -%}<figcaption class="wp-hand wp-polaroid__cap">{{ section.settings.image_caption | escape }}</figcaption>{%- endif -%}
+        </figure>
+      {%- elsif section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 1280 | image_tag: loading: 'eager', widths: '640, 960, 1280', sizes: '(min-width: 1280px) 600px, 100vw' }}
       {%- elsif section.settings.variant == 'story' -%}
         {% render 'wp-art-story' %}
@@ -24,6 +33,9 @@
       {%- endif -%}
     </div>
   </div>
+  {%- if section.settings.variant == 'story' -%}
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+  {%- endif -%}
 </section>
 {% schema %}
 {
@@ -37,7 +49,8 @@
     { "type": "url", "id": "button_link", "label": "Button 1 link" },
     { "type": "text", "id": "button2_label", "label": "Button 2 label", "default": "Beach Essentials" },
     { "type": "url", "id": "button2_link", "label": "Button 2 link" },
-    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" }
+    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" },
+    { "type": "text", "id": "image_caption", "label": "Photo caption (handwritten, Our Story layout only)" }
   ],
   "presets": [{ "name": "WP Hero" }]
 }

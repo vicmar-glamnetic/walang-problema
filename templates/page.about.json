@@ -18,12 +18,14 @@
         "text": "Walang Problema is what we hear all the time in our tropical paradise of El Nido; a place where time goes slower, smiles are more plenty, and joking around is a way of life.",
         "button_label": "",
         "button2_label": "",
-        "image": "shopify://shop_images/walangproblema_headerteam.jpg"
+        "image": "shopify://shop_images/walangproblema_headerteam.jpg",
+        "image_caption": "Just another Tuesday in El Nido"
       }
     },
     "intro": {
       "type": "wp-intro",
       "settings": {
+        "kicker": "Easy lang, friend",
         "heading": "Walang Problema Philosophy",
         "text": "As Europeans living in the Philippines, we found ourselves living differently again, adapting and embracing a more relaxed way of life. In this spirit \"Walang Problema\" was created, with the sole objective to spread this vibe, this spirit, this idea that we don't have to take life too seriously. We are allowed to make mistakes, to be stupid and to entertain and be entertained.\n\n\"Walang Problema\" in Tagalog means \"No Problem\". We want our fans and friends to think positive; to remind ourselves that life is beautiful; to see the beauty in the little things. If you do something stupid, no worries, somebody else did something more stupid.\n\nWearing this lifestyle is the way we choose to spread our message."
       }
@@ -49,7 +51,7 @@
         "text": "We love to play and provoke, and make people laugh. And that's the attitude we all have. As a young and international group of colleagues, we support each other, try to improve together, and make sure we enjoy and have fun doing our job."
       }
     },
-    "cta": { "type": "wp-cta", "settings": { "heading": "Ready for island life?", "button_label": "Shop the collection", "button_link": "shopify://collections/all", "button2_label": "Get in touch", "button2_link": "shopify://pages/contact" } }
+    "cta": { "type": "wp-cta", "settings": { "kicker": "Sun's out, stress out", "heading": "Ready for island life?", "button_label": "Shop the collection", "button_link": "shopify://collections/all", "button2_label": "Get in touch", "button2_link": "shopify://pages/contact" } }
   },
   "order": ["hero", "intro", "quote", "team", "cta"]
 }
