@@ -509,3 +509,10 @@ body{margin:0;background:#F4EBDD}
 .wp-header__in,.wp-hero__in,.wp-strip__in,.wp-story,.wp-news__in,.wp-footer__grid,.wp-footer__base,.wp-banner__in,.wp-coll,.wp-pdp,.wp-rel,.wp-vals,.wp-split__in,.wp-cta,.wp-contact,.wp-team,.wp-blog,.wp-cats,.wp-best,.wp-comm{padding-left:40px;padding-right:40px;box-sizing:border-box}
 .wp-best .wp-grid,.wp-rel .wp-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+/* collection: sort dropdown with custom chevron */
+.wp-coll .wp-sort{gap:12px;font-weight:600;color:#0E4D4F}
+.wp-coll .wp-sort select{-webkit-appearance:none;-moz-appearance:none;appearance:none;box-sizing:border-box;min-height:44px;padding:0 44px 0 18px;border:2px solid #0E4D4F;border-radius:999px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 L7 7 L12.5 1.5' fill='none' stroke='%230E4D4F' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 18px center/12px 8px;font:600 15px Inter,sans-serif;color:#0E4D4F;cursor:pointer;transition:background-color .2s ease,transform .2s ease}
+.wp-coll .wp-sort select:hover{background-color:#F4EBDD;transform:translateY(-1px)}
+.wp-coll .wp-sort select:focus-visible{outline:2px solid #C2522B;outline-offset:2px}
+.wp-coll .wp-sort select::-ms-expand{display:none}
+@media(prefers-reduced-motion:reduce){.wp-coll .wp-sort select{transition:none}}
