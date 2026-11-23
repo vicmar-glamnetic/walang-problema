@@ -905,3 +905,9 @@ body{margin:0;background:#F4EBDD}
 .wp-palm--foot-r{width:200px}
 }
 @media(prefers-reduced-motion:reduce){.wp-footer--island .wp-footer__col a{transition:none}}
+/* footer credits */
+.wp-footer__credit{display:flex;flex-wrap:wrap;gap:2px 12px;margin:10px 0 0;font-size:13px;line-height:1.5;color:#B9B2A4}
+.wp-footer__credit span + span{padding-left:12px;border-left:1px solid #5B6560}
+.wp-footer__credit a{color:#F7C873;font-weight:600}
+.wp-footer__credit a:hover{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:640px){.wp-footer__credit span + span{padding-left:0;border-left:0}}

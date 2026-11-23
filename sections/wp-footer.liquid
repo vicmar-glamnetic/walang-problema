@@ -51,6 +51,12 @@
       <span>{{ section.settings.base_text | escape }}</span>
       {%- for policy in shop.policies -%}<a href="{{ policy.url }}">{{ policy.title | escape }}</a>{%- endfor -%}
     </div>
+    {%- if section.settings.credit_text != blank or section.settings.credit_name != blank -%}
+      <p class="wp-footer__credit">
+        {%- if section.settings.credit_text != blank -%}<span>{{ section.settings.credit_text | escape }}</span>{%- endif -%}
+        {%- if section.settings.credit_name != blank -%}<span>{{ section.settings.credit_prefix | escape }} <a href="{{ section.settings.credit_link | default: 'https://vjyanson.com' }}" target="_blank" rel="noopener">{{ section.settings.credit_name | escape }}</a></span>{%- endif -%}
+      </p>
+    {%- endif -%}
   </div>
 </footer>
 {% schema %}
@@ -74,7 +80,11 @@
     { "type": "header", "content": "Bottom" },
     { "type": "text", "id": "pay_heading", "label": "Payments label", "default": "We accept" },
     { "type": "text", "id": "pay_fallback", "label": "Text shown until payment methods are set up", "default": "[YOUR PAYMENT METHODS]", "info": "Separate with ·" },
-    { "type": "text", "id": "base_text", "label": "Bottom line", "default": "Concept design by VJ Yanson for Walang Problema. Product photos to be supplied by the brand." }
+    { "type": "text", "id": "base_text", "label": "Bottom line", "default": "Concept design by VJ Yanson for Walang Problema. Product photos to be supplied by the brand." },
+    { "type": "text", "id": "credit_text", "label": "Photo credit", "default": "Pictures credit by Ivan Solis Islas Retrato" },
+    { "type": "text", "id": "credit_prefix", "label": "Site credit text", "default": "Powered by" },
+    { "type": "text", "id": "credit_name", "label": "Site credit name", "default": "vjyanson" },
+    { "type": "url", "id": "credit_link", "label": "Site credit link" }
   ]
 }
 {% endschema %}
