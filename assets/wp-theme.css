@@ -1162,3 +1162,5 @@ body:has(#cart-drawer) .page-wrapper{transition:none}
 .wp-wide .wp-hero__btns .wp-btn{min-height:54px;padding:0 8px;font-size:15px;text-align:center;line-height:1.2;box-sizing:border-box}
 .wp-wide .wp-hero__btns .wp-btn:only-child{grid-column:1/-1}
 }
+/* product photos: only the chosen color */
+.wp-pdp__thumbs .wp-thumb[hidden]{display:none}

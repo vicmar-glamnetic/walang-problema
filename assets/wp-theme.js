@@ -273,6 +273,47 @@
       try { return new Intl.NumberFormat(document.documentElement.lang || 'en', { style: 'currency', currency: data.currency, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(c / 100); }
       catch (e) { return (c / 100).toFixed(2); }
     }
+    // Work out which color each photo shows, so picking a color can hide the other photos.
+    // In order: "#Color" in the alt text, the photo linked to a variant, then the color in the file name.
+    var colorAt = groups.findIndex(function (g) { return g.classList.contains('wp-opt--color'); });
+    var thumbList = Array.prototype.slice.call(root.querySelectorAll('[data-wp-thumb]'));
+    function pathOf(src) { return new URL(src, window.location.href).pathname; }
+    function squash(t) { return t.toLowerCase().replace(/[^a-z]/g, ''); }
+    function colorsOf(thumb, names, linked) {
+      var img = thumb.querySelector('img');
+      var alt = ((img && img.alt) || '').toLowerCase();
+      var tagged = names.filter(function (n) { return alt.indexOf('#' + n.toLowerCase()) > -1; });
+      if (tagged.length) return tagged;
+      var path = pathOf(thumb.dataset.src);
+      if (linked[path]) return linked[path];
+      var file = squash(path.split('/').pop().replace(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i, '').replace(/\.[a-z]+$/i, ''));
+      var hits = names.map(function (n) { return { name: n, key: squash(n), at: file.indexOf(squash(n)) }; }).filter(function (h) { return h.key && h.at > -1; });
+      // "army green" beats "green"; otherwise the first color in the name wins
+      hits = hits.filter(function (h) { return !hits.some(function (o) { return o.key !== h.key && o.key.indexOf(h.key) > -1; }); });
+      hits.sort(function (a, b) { return a.at - b.at; });
+      return hits.length ? [hits[0].name] : [];
+    }
+    if (colorAt > -1 && thumbList.length > 1) {
+      var names = [], linked = {};
+      data.variants.forEach(function (v) {
+        var n = v.options[colorAt];
+        if (names.indexOf(n) < 0) names.push(n);
+        if (v.image) { var k = pathOf(v.image); linked[k] = linked[k] || []; if (linked[k].indexOf(n) < 0) linked[k].push(n); }
+      });
+      if (names.length > 1) thumbList.forEach(function (t) { t.wpColors = colorsOf(t, names, linked); });
+    }
+    // Show only the photos of this color. A color with no photos shows them all.
+    function filterPhotos(color) {
+      var own = thumbList.filter(function (t) { return t.wpColors && t.wpColors.indexOf(color) > -1; });
+      thumbList.forEach(function (t) { t.hidden = own.length > 0 && own.indexOf(t) < 0; });
+      return own;
+    }
+    function showPhoto(src) {
+      var main = root.querySelector('[data-wp-main-img]');
+      if (main) { main.src = src; main.removeAttribute('srcset'); }
+      markThumb(src);
+    }
+    var shownColor = null;
     // Highlight the thumbnail that matches the main photo and bring it into view
     function markThumb(src) {
       var thumbs = Array.prototype.slice.call(root.querySelectorAll('[data-wp-thumb]'));
@@ -297,17 +338,20 @@
           if (!m || !m.available) b.setAttribute('data-unavailable', ''); else b.removeAttribute('data-unavailable');
         });
       });
+      // Changing only the size keeps the photo the shopper is looking at
+      var color = colorAt > -1 ? sel[colorAt] : '';
+      if (colorAt < 0 || color !== shownColor) {
+        shownColor = color;
+        var own = colorAt > -1 ? filterPhotos(color) : [];
+        if (v && v.image) showPhoto(v.image);
+        else if (own.length) showPhoto(own[0].dataset.src);
+      }
       if (!v) { addBtn.disabled = true; if (buyBtn) buyBtn.disabled = true; addBtn.textContent = data.unavailableLabel; return; }
       idInput.value = v.id;
       priceEl.innerHTML = money(v.price) + (v.compare_at_price > v.price ? '<s>' + money(v.compare_at_price) + '</s>' : '');
       addBtn.disabled = !v.available; if (buyBtn) buyBtn.disabled = !v.available;
       addBtn.textContent = v.available ? data.addLabel : data.soldOutLabel;
       var u = new URL(window.location.href); u.searchParams.set('variant', v.id); window.history.replaceState({}, '', u);
-      if (v.image) {
-        var main = root.querySelector('[data-wp-main-img]');
-        if (main) { main.src = v.image; main.removeAttribute('srcset'); }
-        markThumb(v.image);
-      }
     }
     groups.forEach(function (g, i) {
       g.querySelectorAll('button').forEach(function (b) {
