@@ -57,13 +57,15 @@
     "story": {
       "type": "wp-brand-story",
       "settings": {
-        "layout": "split",
+        "layout": "collage",
         "kicker": "The Walang Problema way",
         "title": "Less stress.\nMore sunshine.",
         "text": "Walang Problema is more than a shirt. It is a way of living: slow down, be happy and live life to the fullest, wherever your island is.",
         "button_label": "Read our story",
         "button_link": "shopify://pages/our-story",
-        "image": "shopify://shop_images/498944265_1292181796247830_8214228307750643666_n.jpg"
+        "image": "shopify://shop_images/496800887_1288765329922810_6589779164056565608_n.jpg",
+        "image_2": "shopify://shop_images/591146976_18249819211293801_4013963296733595801_n.jpg",
+        "image_3": "shopify://shop_images/494583111_1277442254388451_4443204547331715420_n.jpg"
       }
     },
     "community": {

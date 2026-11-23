@@ -1,3 +1,24 @@
+{%- if section.settings.layout == 'collage' -%}
+<section class="wp-s wp-trio" id="story" {{ section.shopify_attributes }}>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave wp-wave--top" aria-hidden="true"><path d="M0 30 C240 60 480 0 720 30 C960 60 1200 0 1440 30 L1440 0 L0 0 Z" fill="#F4EBDD"></path></svg>
+  {% render 'wp-palm', class: 'wp-palm wp-palm--trio', color: '#2A8C8C' %}
+  <div class="wp-trio__in">
+    <div class="wp-trio__copy">
+      {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-story__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+      <h2 class="wp-hd wp-story__title">{{ section.settings.title | escape | newline_to_br }}</h2>
+      {%- if section.settings.text != blank -%}<p class="wp-story__text">{{ section.settings.text | escape }}</p>{%- endif -%}
+      {%- if section.settings.button_label != blank -%}<a href="{{ section.settings.button_link | default: routes.root_url }}" class="wp-btn wp-btn--gold wp-story__btn">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+    </div>
+    <div class="wp-trio__photos">
+      <span class="wp-trio__sun" aria-hidden="true"></span>
+      {%- if section.settings.image_2 != blank -%}<div class="wp-trio__photo wp-trio__photo--a">{{ section.settings.image_2 | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '300, 500, 700, 1000', sizes: '(min-width: 901px) 300px, 50vw', alt: section.settings.image_2.alt | default: '' }}</div>{%- endif -%}
+      {%- if section.settings.image != blank -%}<div class="wp-trio__photo wp-trio__photo--b">{{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 901px) 320px, 100vw', alt: section.settings.image.alt | default: '' }}</div>{%- endif -%}
+      {%- if section.settings.image_3 != blank -%}<div class="wp-trio__photo wp-trio__photo--c">{{ section.settings.image_3 | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '300, 500, 700, 1000', sizes: '(min-width: 901px) 300px, 50vw', alt: section.settings.image_3.alt | default: '' }}</div>{%- endif -%}
+    </div>
+  </div>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+</section>
+{%- else -%}
 <section class="wp-s wp-story{% if section.settings.layout == 'full' or section.settings.layout == 'split' %} wp-story--full{% endif %}{% if section.settings.layout == 'split' %} wp-story--split{% endif %}" id="story" {{ section.shopify_attributes }}>
   <div class="wp-story__panel">
     <div class="wp-story__copy">
@@ -16,17 +37,20 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 {% schema %}
 {
   "name": "WP Brand story",
   "settings": [
-    { "type": "select", "id": "layout", "label": "Layout", "default": "panel", "options": [{ "value": "panel", "label": "Rounded panel" }, { "value": "full", "label": "Full-width photo" }, { "value": "split", "label": "Split (text left, photo right)" }] },
+    { "type": "select", "id": "layout", "label": "Layout", "default": "panel", "options": [{ "value": "panel", "label": "Rounded panel" }, { "value": "full", "label": "Full-width photo" }, { "value": "split", "label": "Split (text left, photo right)" }, { "value": "collage", "label": "Three photos on a wavy band" }] },
     { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "The Walang Problema way" },
     { "type": "textarea", "id": "title", "label": "Heading", "default": "Less stress.\nMore sunshine." },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Walang Problema is more than a shirt. It is a way of living: slow down, be happy and live life to the fullest, wherever your island is." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Read our story" },
     { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" }
+    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" },
+    { "type": "image_picker", "id": "image_2", "label": "Left photo (three photos layout)" },
+    { "type": "image_picker", "id": "image_3", "label": "Right photo (three photos layout)" }
   ],
   "presets": [{ "name": "WP Brand story" }]
 }
