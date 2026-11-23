@@ -18,6 +18,60 @@
         drawer.open();
       });
     });
+    // Add to cart without leaving the page, then slide the cart drawer open.
+    // "Buy it now" and pages without the drawer keep the normal form submit.
+    document.querySelectorAll('.wp-card form, #wp-product-form').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        var drawer = document.getElementById('cart-drawer');
+        var items = drawer && drawer.querySelector('cart-items-component');
+        if (!items || typeof drawer.open !== 'function') return;
+        if (e.submitter && e.submitter.name === 'checkout') return;
+        e.preventDefault();
+        if (form.dataset.wpBusy) return;
+        form.dataset.wpBusy = '1';
+        addToCart(form, drawer, items.dataset.sectionId).then(function () { delete form.dataset.wpBusy; });
+      });
+    });
+    function formMessage(form, text) {
+      var el = form.querySelector('.wp-form-msg');
+      if (!el) {
+        el = document.createElement('p');
+        el.className = 'wp-form-msg';
+        el.setAttribute('role', 'alert');
+        form.appendChild(el);
+      }
+      el.textContent = text;
+      el.hidden = !text;
+    }
+    async function addToCart(form, drawer, sectionId) {
+      var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+      var added = false;
+      formMessage(form, '');
+      try {
+        var body = new FormData(form);
+        body.append('sections', sectionId);
+        var res = await fetch(root + 'cart/add.js', { method: 'POST', body: body, headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+        var data = await res.json();
+        if (!res.ok || data.status) { formMessage(form, data.description || data.message || 'Sorry, we could not add that. Please try again.'); return; }
+        added = true;
+        var cart = await (await fetch(root + 'cart.js', { headers: { Accept: 'application/json' } })).json();
+        var CartLinesUpdateEvent = (await import('@shopify/events')).CartLinesUpdateEvent;
+        var deferred = CartLinesUpdateEvent.createPromise();
+        form.dispatchEvent(new CartLinesUpdateEvent({
+          action: 'add',
+          context: 'product',
+          lines: [{ merchandiseId: String(body.get('id')), quantity: Number(body.get('quantity')) || 1 }],
+          promise: deferred.promise
+        }));
+        deferred.resolve({ cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart), detail: { items: cart.items, sections: data.sections, source: 'wp-theme', didError: false } });
+        document.querySelectorAll('[data-wp-cart]').forEach(function (l) { l.setAttribute('aria-label', 'Cart (' + cart.item_count + ')'); });
+        if (!drawer.isOpen) drawer.open();
+      } catch (err) {
+        // The item may already be in the cart, so show the cart instead of adding it twice
+        if (added) window.location.href = root + 'cart';
+        else formMessage(form, 'Sorry, something went wrong. Please try again.');
+      }
+    }
     // Quantity steppers
     document.querySelectorAll('[data-wp-qty]').forEach(function (box) {
       var input = box.querySelector('input');
