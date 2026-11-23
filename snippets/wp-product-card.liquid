@@ -6,7 +6,7 @@
 {%- assign wp_i = index | default: 0 | modulo: 6 -%}
 <article class="wp-card">
   <a href="{{ product.url }}" class="wp-card__media" aria-label="{{ 'accessibility.view_product' | t: default: 'View' }} {{ product.title | escape }}">
-    <div class="wp-card__box" style="background: {{ wp_bgs[wp_i] }}">
+    <div class="wp-card__box{% if product.tags contains 'white-bg' %} wp-white-bg{% endif %}" style="background: {% if product.featured_image %}#FFFFFF{% else %}{{ wp_bgs[wp_i] }}{% endif %}">
       {%- if product.tags contains 'best-seller' -%}
         <span class="wp-badge">Best seller</span>
       {%- elsif product.tags contains 'new' -%}

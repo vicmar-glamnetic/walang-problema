@@ -1,3 +1,6 @@
+{%- comment -%} Turns a cream photo background white. Used by products tagged "white-bg". {%- endcomment -%}
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="wp-white-bg" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="linear" slope="1.035"/><feFuncG type="linear" slope="1.08"/><feFuncB type="linear" slope="1.15"/></feComponentTransfer></filter></svg>
+<style>.wp-white-bg img{filter:url(#wp-white-bg)}</style>
 <header class="wp-s wp-header" {{ section.shopify_attributes }}>
   <div class="wp-header__in">
     <details class="wp-mnav">

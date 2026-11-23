@@ -701,3 +701,5 @@ body{margin:0;background:#F4EBDD}
 .wp-strip__item{flex-direction:column;justify-content:flex-start;gap:10px;text-align:center}
 .wp-strip__icon{width:56px;height:56px}
 }
+/* product photos sit on white */
+.wp-pdp__gal--photo .wp-pdp__main,.wp-pdp__gal--photo .wp-thumb{background:#fff}

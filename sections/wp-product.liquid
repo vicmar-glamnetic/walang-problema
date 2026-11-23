@@ -9,7 +9,7 @@
 <section class="wp-s wp-pdp" data-wp-product {{ section.shopify_attributes }}>
   <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / {% if crumb_collection != blank %}<a href="{{ crumb_collection.url }}">{{ crumb_collection.title | escape }}</a> / {% endif %}{{ product.title | escape }}</nav>
   <div class="wp-pdp__cols">
-    <div class="wp-pdp__gal">
+    <div class="wp-pdp__gal{% if product.featured_image %} wp-pdp__gal--photo{% endif %}{% if product.tags contains 'white-bg' %} wp-white-bg{% endif %}">
       <div class="wp-pdp__main">
         {%- if product.tags contains 'best-seller' -%}<span class="wp-badge">Best seller</span>{%- elsif product.tags contains 'new' -%}<span class="wp-badge">New</span>{%- endif -%}
         {%- if product.featured_image -%}
