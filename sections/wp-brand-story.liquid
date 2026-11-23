@@ -1,7 +1,7 @@
-<section class="wp-s wp-story{% if section.settings.layout == 'full' %} wp-story--full{% endif %}" id="story" {{ section.shopify_attributes }}>
+<section class="wp-s wp-story{% if section.settings.layout == 'full' or section.settings.layout == 'split' %} wp-story--full{% endif %}{% if section.settings.layout == 'split' %} wp-story--split{% endif %}" id="story" {{ section.shopify_attributes }}>
   <div class="wp-story__panel">
     <div class="wp-story__copy">
-      {%- if section.settings.layout != 'full' -%}{% render 'wp-palm', class: 'wp-palm wp-palm--story', color: '#2A8C8C' %}{%- endif -%}
+      {%- if section.settings.layout == 'panel' -%}{% render 'wp-palm', class: 'wp-palm wp-palm--story', color: '#2A8C8C' %}{%- endif -%}
       <p class="wp-hand wp-story__kicker">{{ section.settings.kicker | escape }}</p>
       <h2 class="wp-hd wp-story__title">{{ section.settings.title | escape | newline_to_br }}</h2>
       <p class="wp-story__text">{{ section.settings.text | escape }}</p>
@@ -20,7 +20,7 @@
 {
   "name": "WP Brand story",
   "settings": [
-    { "type": "select", "id": "layout", "label": "Layout", "default": "panel", "options": [{ "value": "panel", "label": "Rounded panel" }, { "value": "full", "label": "Full-width photo" }] },
+    { "type": "select", "id": "layout", "label": "Layout", "default": "panel", "options": [{ "value": "panel", "label": "Rounded panel" }, { "value": "full", "label": "Full-width photo" }, { "value": "split", "label": "Split (text left, photo right)" }] },
     { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "The Walang Problema way" },
     { "type": "textarea", "id": "title", "label": "Heading", "default": "Less stress.\nMore sunshine." },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Walang Problema is more than a shirt. It is a way of living: slow down, be happy and live life to the fullest, wherever your island is." },

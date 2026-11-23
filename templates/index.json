@@ -57,26 +57,30 @@
     "story": {
       "type": "wp-brand-story",
       "settings": {
-        "layout": "full",
+        "layout": "split",
         "kicker": "The Walang Problema way",
         "title": "Less stress.\nMore sunshine.",
         "text": "Walang Problema is more than a shirt. It is a way of living: slow down, be happy and live life to the fullest, wherever your island is.",
         "button_label": "Read our story",
         "button_link": "shopify://pages/our-story",
-        "image": "shopify://shop_images/blog-section-HOME-Lala.jpg"
+        "image": "shopify://shop_images/498944265_1292181796247830_8214228307750643666_n.jpg"
       }
     },
     "community": {
       "type": "wp-community",
       "blocks": {
-        "c1": { "type": "tile", "settings": { "image": "shopify://shop_images/Follow-us-FB-copia2000.jpg", "label": "Laughing on a motorbike ride through the jungle", "bg": "#F7C873", "fg": "#1B2421" } },
-        "c2": { "type": "tile", "settings": { "image": "shopify://shop_images/REVERSIBLE-PLAIN-HAT-BLACK-1_29e21275-d7a1-4424-b496-ac814f9d62fb.webp", "label": "Reversible bucket hat smiles", "bg": "#2A8C8C", "fg": "#FFFFFF" } },
-        "c3": { "type": "tile", "settings": { "image": "shopify://shop_images/Kids-Palm-Tree-Army-Green-2.jpg", "label": "Little islander with a surfboard", "bg": "#C2522B", "fg": "#FFFFFF" } },
-        "c4": { "type": "tile", "settings": { "image": "shopify://shop_images/KIDS-Turtle-Army-green-1.jpg", "label": "Pineapple shades, turtle tee", "bg": "#4B5A3A", "fg": "#FFFFFF" } },
-        "c5": { "type": "tile", "settings": { "image": "shopify://shop_images/Kayak-T-shirt-ARMY-GREEN-1.jpg", "label": "Kayak tee and a pineapple", "bg": "#E6D9C2", "fg": "#1B2421" } }
+        "c1": { "type": "tile", "settings": { "image": "shopify://shop_images/497552647_1288090979990245_7109346546124450915_n.jpg", "label": "Three friends in Walang Problema tees on a boat in El Nido", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c2": { "type": "tile", "settings": { "image": "shopify://shop_images/497736673_1290877236378286_7122364592381863432_n.jpg", "label": "Palm tree tank top and floral cap on a bangka net", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c3": { "type": "tile", "settings": { "image": "shopify://shop_images/561135608_18242059561293801_4323314927288544834_n.jpg", "label": "Friends, a dog and fresh coconuts on a yellow jeepney", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c4": { "type": "tile", "settings": { "image": "shopify://shop_images/498690085_1292750649524278_2272990312191753662_n.jpg", "label": "Big smile in the Talaga cropped top", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c5": { "type": "tile", "settings": { "image": "shopify://shop_images/496254363_1284611100338233_8598819783628143737_n.jpg", "label": "Walang Pera tank on the bow of a bangka", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c6": { "type": "tile", "settings": { "image": "shopify://shop_images/566257810_18243401305293801_1182029894822052858_n.jpg", "label": "Journey to Paradise tee on a jungle ride", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c7": { "type": "tile", "settings": { "image": "shopify://shop_images/495978050_1286892710110072_8129342809243249653_n.jpg", "label": "Looking out over a Palawan bay in a palm tree tee", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c8": { "type": "tile", "settings": { "image": "shopify://shop_images/494943123_1277577754374901_8217084814616607612_n.jpg", "label": "Two friends laughing on a motorbike", "bg": "#E2D5BF", "fg": "#1B2421" } },
+        "c9": { "type": "tile", "settings": { "image": "shopify://shop_images/496607861_1286876506778359_8068609453536016754_n.jpg", "label": "Floral bucket hat behind a film camera", "bg": "#E2D5BF", "fg": "#1B2421" } }
       },
-      "block_order": ["c1", "c2", "c3", "c4", "c5"],
-      "settings": { "layout": "mosaic", "heading": "#WalangProblema", "link_label": "Follow us on Instagram", "link": "https://www.instagram.com/walangproblemabrand/" }
+      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"],
+      "settings": { "layout": "mosaic", "heading": "#WalangProblema", "link_label": "Follow us @walangproblemabrand", "link": "https://www.instagram.com/walangproblemabrand/", "facebook": "https://www.facebook.com/walangproblemabrand" }
     },
     "newsletter": {
       "type": "wp-newsletter",
