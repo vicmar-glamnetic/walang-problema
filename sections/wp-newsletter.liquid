@@ -1,6 +1,8 @@
 <section class="wp-s wp-news" {{ section.shopify_attributes }}>
-  {% render 'wp-palm', class: 'wp-palm wp-palm--news-l', color: '#4B5A3A' %}
-  {% render 'wp-palm', class: 'wp-palm wp-palm--news-r', color: '#0E4D4F' %}
+  {%- if section.settings.show_palms -%}
+    {% render 'wp-palm', class: 'wp-palm wp-palm--news-l', color: '#4B5A3A' %}
+    {% render 'wp-palm', class: 'wp-palm wp-palm--news-r', color: '#0E4D4F' %}
+  {%- endif -%}
   <div class="wp-news__in">
     <div class="wp-news__copy">
       <h2 class="wp-hd wp-news__title">{{ section.settings.heading | escape }}</h2>
@@ -24,7 +26,8 @@
     { "type": "text", "id": "text", "label": "Text", "default": "Be first to know about new drops and promos. No spam, walang problema." },
     { "type": "text", "id": "placeholder", "label": "Email placeholder", "default": "Your email address" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Subscribe" },
-    { "type": "text", "id": "success", "label": "Success message", "default": "Salamat! You're on the list." }
+    { "type": "text", "id": "success", "label": "Success message", "default": "Salamat! You're on the list." },
+    { "type": "checkbox", "id": "show_palms", "label": "Show palm leaves", "default": true }
   ],
   "presets": [{ "name": "WP Newsletter" }]
 }

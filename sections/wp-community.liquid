@@ -1,12 +1,12 @@
-<section class="wp-s wp-sec wp-comm" {{ section.shopify_attributes }}>
+<section class="wp-s wp-sec wp-comm{% if section.settings.layout == 'mosaic' %} wp-comm--mosaic{% endif %}" {{ section.shopify_attributes }}>
   <div class="wp-sec__head wp-comm__head">
     <h2 class="wp-hd wp-sec__title">{{ section.settings.heading | escape }}</h2>
     {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.link | default: '#top' }}" class="wp-link">{{ section.settings.link_label | escape }}</a>{%- endif -%}
   </div>
   <div class="wp-comm__grid">
     {%- for block in section.blocks -%}
-      <div class="wp-tile{% if block.settings.image != blank %} wp-tile--photo{% endif %}" style="background: {{ block.settings.bg }}; color: {{ block.settings.fg }}" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '300, 500, 700', sizes: '(min-width: 1200px) 300px, 50vw', alt: block.settings.label }}{%- else -%}<span>{{ block.settings.label | escape }}</span>{%- endif -%}
+      <div class="wp-tile{% if block.settings.image != blank %} wp-tile--photo{% endif %}" {% unless section.settings.layout == 'mosaic' and block.settings.image != blank %}style="background: {{ block.settings.bg }}; color: {{ block.settings.fg }}"{% endunless %} {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '300, 500, 700, 1000, 1400', sizes: '(min-width: 900px) 50vw, 100vw', alt: block.settings.label }}{%- else -%}<span>{{ block.settings.label | escape }}</span>{%- endif -%}
       </div>
     {%- endfor -%}
   </div>
@@ -15,6 +15,7 @@
 {
   "name": "WP Community grid",
   "settings": [
+    { "type": "select", "id": "layout", "label": "Layout", "default": "polaroids", "options": [{ "value": "polaroids", "label": "Tilted polaroids" }, { "value": "mosaic", "label": "Mosaic (first photo large)" }] },
     { "type": "text", "id": "heading", "label": "Heading", "default": "#WalangProblema" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Follow us on Instagram and Facebook" },
     { "type": "url", "id": "link", "label": "Link" }

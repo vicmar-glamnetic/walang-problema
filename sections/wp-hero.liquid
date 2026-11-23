@@ -1,3 +1,28 @@
+{%- if section.settings.variant == 'wide' -%}
+<section class="wp-s wp-wide" id="top" {{ section.shopify_attributes }}>
+  {%- if section.settings.image != blank -%}
+    <div class="wp-wide__photo">
+      {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200, 1600, 2000, 2400', sizes: '100vw', alt: section.settings.image.alt | default: section.settings.title }}
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+    </div>
+  {%- endif -%}
+  <div class="wp-wide__in">
+    <div class="wp-wide__head">
+      {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-hero__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+      <h1 class="wp-hd wp-hero__title">{{ section.settings.title | escape | newline_to_br }}</h1>
+    </div>
+    <div class="wp-wide__side">
+      {%- if section.settings.text != blank -%}<p class="wp-hero__text">{{ section.settings.text | escape }}</p>{%- endif -%}
+      {%- if section.settings.button_label != blank or section.settings.button2_label != blank -%}
+        <div class="wp-hero__btns">
+          {%- if section.settings.button_label != blank -%}<a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="wp-btn wp-btn--primary">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+          {%- if section.settings.button2_label != blank -%}<a href="{{ section.settings.button2_link | default: routes.all_products_collection_url }}" class="wp-btn wp-btn--ghost">{{ section.settings.button2_label | escape }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- else -%}
 <section class="wp-s wp-hero{% if section.settings.variant == 'story' %} wp-hero--story{% endif %}{% if section.settings.image != blank and section.settings.variant != 'story' %} wp-hero--photo{% endif %}" id="top" {{ section.shopify_attributes }}>
   {%- if section.settings.variant == 'story' or section.settings.image != blank -%}
     {% render 'wp-palm', class: 'wp-palm wp-palm--hero-l', color: '#4B5A3A' %}
@@ -41,11 +66,12 @@
     <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="{{ section.settings.wave_color | default: '#F4EBDD' }}"></path></svg>
   {%- endif -%}
 </section>
+{%- endif -%}
 {% schema %}
 {
   "name": "WP Hero",
   "settings": [
-    { "type": "select", "id": "variant", "label": "Layout", "default": "home", "options": [{ "value": "home", "label": "Home (large)" }, { "value": "story", "label": "Our Story (with breadcrumb)" }] },
+    { "type": "select", "id": "variant", "label": "Layout", "default": "home", "options": [{ "value": "home", "label": "Home (large)" }, { "value": "wide", "label": "Home (full-width photo)" }, { "value": "story", "label": "Our Story (with breadcrumb)" }] },
     { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Mabuhay, islander!" },
     { "type": "textarea", "id": "title", "label": "Heading", "default": "Island Life\nin cotton." },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Easy tees, caps and beach gear made for slow mornings, salty air and zero stress. Spread the joy and wear it with pride." },

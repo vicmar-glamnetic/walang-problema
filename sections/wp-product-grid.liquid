@@ -6,7 +6,13 @@
     </div>
     {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.collection.url | default: routes.all_products_collection_url }}" class="wp-link">{{ section.settings.link_label | escape }}</a>{%- endif -%}
   </div>
-  <div class="wp-grid">
+  {%- liquid
+    assign grid_count = 0
+    for product in section.settings.collection.products limit: section.settings.limit
+      assign grid_count = grid_count | plus: 1
+    endfor
+  -%}
+  <div class="wp-grid{% if grid_count == 3 and section.settings.filler_heading == blank %} wp-grid--three{% endif %}">
     {%- for product in section.settings.collection.products limit: section.settings.limit -%}
       {% render 'wp-product-card', product: product, index: forloop.index0 %}
     {%- else -%}
