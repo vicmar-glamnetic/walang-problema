@@ -1,10 +1,22 @@
-<section class="wp-s wp-news" {{ section.shopify_attributes }}>
-  {%- if section.settings.show_palms -%}
+{%- assign island = section.settings.scene -%}
+<section class="wp-s wp-news{% if island %} wp-news--island{% endif %}" {{ section.shopify_attributes }}>
+  {%- if section.settings.show_palms and island == false -%}
     {% render 'wp-palm', class: 'wp-palm wp-palm--news-l', color: '#4B5A3A' %}
     {% render 'wp-palm', class: 'wp-palm wp-palm--news-r', color: '#0E4D4F' %}
   {%- endif -%}
+  {%- if island -%}
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave wp-wave--top" aria-hidden="true"><path d="M0 30 C240 60 480 0 720 30 C960 60 1200 0 1440 30 L1440 0 L0 0 Z" fill="#F4EBDD"></path></svg>
+    <div class="wp-news__scene" aria-hidden="true">
+      {% render 'wp-palm', class: 'wp-palm wp-palm--isle-l', color: '#4B5A3A' %}
+      {% render 'wp-palm', class: 'wp-palm wp-palm--isle-r', color: '#4B5A3A' %}
+      <span class="wp-news__sun"></span>
+      {% render 'wp-boat', class: 'wp-news__boat' %}
+      <svg class="wp-news__sea" viewBox="0 0 1440 200" preserveAspectRatio="none"><path d="M0 50 C180 15 360 85 540 50 C720 15 900 85 1080 50 C1260 15 1380 70 1440 50 L1440 200 L0 200 Z" fill="#2A8C8C"></path><path d="M0 105 C180 75 360 135 540 105 C720 75 900 135 1080 105 C1260 75 1380 125 1440 105 L1440 200 L0 200 Z" fill="#0E4D4F"></path></svg>
+    </div>
+  {%- endif -%}
   <div class="wp-news__in">
     <div class="wp-news__copy">
+      {%- if island and section.settings.kicker != blank -%}<p class="wp-hand wp-news__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
       <h2 class="wp-hd wp-news__title">{{ section.settings.heading | escape }}</h2>
       <p class="wp-news__text">{{ section.settings.text | escape }}</p>
     </div>
@@ -13,6 +25,12 @@
       <label for="wp-nl-{{ section.id }}" class="wp-sr">Email address</label>
       <input id="wp-nl-{{ section.id }}" class="wp-news__input" type="email" name="contact[email]" placeholder="{{ section.settings.placeholder | escape }}" required autocomplete="email">
       <button type="submit" class="wp-news__btn">{{ section.settings.button_label | escape }}</button>
+      {%- if island -%}
+        <ul class="wp-news__perks">
+          {%- assign perks = section.settings.perks | split: ',' -%}
+          {%- for perk in perks -%}<li>{{ perk | strip | escape }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
       {%- if form.posted_successfully? -%}<p class="wp-news__msg" role="status">{{ section.settings.success | escape }}</p>{%- endif -%}
       {%- if form.errors -%}<p class="wp-news__msg" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
     {%- endform -%}
@@ -27,7 +45,11 @@
     { "type": "text", "id": "placeholder", "label": "Email placeholder", "default": "Your email address" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Subscribe" },
     { "type": "text", "id": "success", "label": "Success message", "default": "Salamat! You're on the list." },
-    { "type": "checkbox", "id": "show_palms", "label": "Show palm leaves", "default": true }
+    { "type": "checkbox", "id": "show_palms", "label": "Show palm leaves", "default": true },
+    { "type": "header", "content": "Island sunset scene" },
+    { "type": "checkbox", "id": "scene", "label": "Show the island sunset scene", "default": true },
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Psst, islander!" },
+    { "type": "text", "id": "perks", "label": "Perks (separate with commas)", "default": "New drops first, Island promos, Zero spam" }
   ],
   "presets": [{ "name": "WP Newsletter" }]
 }
