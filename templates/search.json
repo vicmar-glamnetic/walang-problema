@@ -12,6 +12,7 @@
     "main": {
       "type": "wp-search",
       "settings": {
+        "heading": "Search the island",
         "picks": [
           "long-logo-t-shirt",
           "animal-patched-cap",
