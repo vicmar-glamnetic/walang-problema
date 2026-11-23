@@ -8,6 +8,16 @@
         if (f) f.submit();
       });
     });
+    // Mobile header cart: slide the cart drawer open (falls back to the cart page)
+    document.querySelectorAll('[data-wp-cart]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || !window.matchMedia('(max-width: 900px)').matches) return;
+        var drawer = document.getElementById('cart-drawer');
+        if (!drawer || typeof drawer.open !== 'function') return;
+        e.preventDefault();
+        drawer.open();
+      });
+    });
     // Quantity steppers
     document.querySelectorAll('[data-wp-qty]').forEach(function (box) {
       var input = box.querySelector('input');
