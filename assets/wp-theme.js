@@ -302,10 +302,11 @@
       });
       if (names.length > 1) thumbList.forEach(function (t) { t.wpColors = colorsOf(t, names, linked); });
     }
-    // Show only the photos of this color. A color with no photos shows them all.
+    // All photos show until the shopper picks a color, then only that color's photos.
+    // A color with no photos shows them all.
     function filterPhotos(color) {
       var own = thumbList.filter(function (t) { return t.wpColors && t.wpColors.indexOf(color) > -1; });
-      thumbList.forEach(function (t) { t.hidden = own.length > 0 && own.indexOf(t) < 0; });
+      thumbList.forEach(function (t) { t.hidden = colorPicked && own.length > 0 && own.indexOf(t) < 0; });
       return own;
     }
     function showPhoto(src) {
@@ -313,7 +314,7 @@
       if (main) { main.src = src; main.removeAttribute('srcset'); }
       markThumb(src);
     }
-    var shownColor = null;
+    var shownColor = null, colorPicked = false;
     // Highlight the thumbnail that matches the main photo and bring it into view
     function markThumb(src) {
       var thumbs = Array.prototype.slice.call(root.querySelectorAll('[data-wp-thumb]'));
@@ -340,8 +341,9 @@
       });
       // Changing only the size keeps the photo the shopper is looking at
       var color = colorAt > -1 ? sel[colorAt] : '';
-      if (colorAt < 0 || color !== shownColor) {
-        shownColor = color;
+      var shown = color + (colorPicked ? '|picked' : '');
+      if (colorAt < 0 || shown !== shownColor) {
+        shownColor = shown;
         var own = colorAt > -1 ? filterPhotos(color) : [];
         if (v && v.image) showPhoto(v.image);
         else if (own.length) showPhoto(own[0].dataset.src);
@@ -355,7 +357,7 @@
     }
     groups.forEach(function (g, i) {
       g.querySelectorAll('button').forEach(function (b) {
-        b.addEventListener('click', function () { sel[i] = b.dataset.value; update(); });
+        b.addEventListener('click', function () { sel[i] = b.dataset.value; if (i === colorAt) colorPicked = true; update(); });
       });
     });
     root.querySelectorAll('[data-wp-thumb]').forEach(function (t) {
