@@ -18,6 +18,105 @@
         drawer.open();
       });
     });
+    // Header search: the icon opens a full-width bar with live suggestions.
+    // Without JavaScript the icon is a plain link to the search page.
+    (function () {
+      var panel = document.querySelector('[data-wp-spanel]');
+      var icon = document.querySelector('[data-wp-search]');
+      if (!panel || !icon) return;
+      var input = panel.querySelector('input[name=q]');
+      var idle = panel.querySelector('[data-wp-search-idle]');
+      var box = panel.querySelector('[data-wp-search-results]');
+      var status = panel.querySelector('[data-wp-search-status]');
+      var menu = document.querySelector('.wp-mnav');
+      var timer, request, last = '';
+      function make(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text) n.textContent = text; return n; }
+      function link(cls, url, text) { var n = make('a', cls, text); n.href = url; return n; }
+      function price(v) {
+        var n = parseFloat(v);
+        if (isNaN(n)) return '';
+        try { return new Intl.NumberFormat(document.documentElement.lang || 'en', { style: 'currency', currency: panel.dataset.currency, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n); }
+        catch (e) { return String(v); }
+      }
+      function showIdle() { last = ''; if (request) request.abort(); idle.hidden = false; box.hidden = true; status.textContent = ''; }
+      function setOpen(open, refocus) {
+        panel.hidden = !open;
+        icon.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) { if (menu) menu.removeAttribute('open'); input.focus(); input.select(); search(); }
+        else { clearTimeout(timer); if (request) request.abort(); last = ''; if (refocus) icon.focus(); }
+      }
+      function chips(list, label, text) {
+        if (!list || !list.length) return;
+        box.appendChild(make('p', 'wp-hand wp-spanel__label', label));
+        var row = make('div', 'wp-spanel__chips');
+        list.slice(0, 8).forEach(function (x) { row.appendChild(link('wp-chip', x.url, text(x))); });
+        box.appendChild(row);
+      }
+      function draw(term, res) {
+        var products = res.products || [], collections = res.collections || [], queries = res.queries || [];
+        box.textContent = '';
+        if (products.length) {
+          box.appendChild(make('p', 'wp-hand wp-spanel__label', 'Catch of the day'));
+          var grid = make('div', 'wp-spanel__grid');
+          products.slice(0, 6).forEach(function (p) {
+            var a = link('wp-spanel__item', p.url);
+            var pic = make('span', 'wp-spanel__pic' + ((p.tags || []).indexOf('white-bg') > -1 ? ' wp-white-bg' : ''));
+            var src = (p.featured_image && p.featured_image.url) || p.image;
+            if (src) {
+              var img = make('img');
+              var u = new URL(src, window.location.href);
+              u.searchParams.set('width', '400');
+              img.src = u.href; img.alt = ''; img.loading = 'lazy';
+              pic.appendChild(img);
+            }
+            a.appendChild(pic);
+            a.appendChild(make('span', 'wp-spanel__name', p.title));
+            a.appendChild(make('span', 'wp-spanel__price', price(p.price)));
+            grid.appendChild(a);
+          });
+          box.appendChild(grid);
+          var all = new URL(panel.dataset.searchUrl, window.location.href);
+          all.searchParams.set('q', term);
+          all.searchParams.set('type', 'product');
+          all.searchParams.set('options[prefix]', 'last');
+          box.appendChild(link('wp-btn wp-btn--primary wp-spanel__all', all.href, 'See all results'));
+        } else {
+          box.appendChild(make('p', 'wp-spanel__none', 'Nothing washed ashore for \u201c' + term + '\u201d. Try a shorter word like tee, cap or bag.'));
+        }
+        chips(collections.slice(0, 4).concat(queries.slice(0, 4)), 'Also try', function (x) { return x.title || x.text; });
+        idle.hidden = products.length + collections.length + queries.length > 0;
+        box.hidden = false;
+        status.textContent = products.length ? products.length + (products.length === 1 ? ' product suggestion' : ' product suggestions') : 'No product suggestions';
+      }
+      async function search() {
+        var term = input.value.trim();
+        if (term.length < 2) { showIdle(); return; }
+        if (term === last) return;
+        last = term;
+        if (request) request.abort();
+        var mine = request = new AbortController();
+        try {
+          var q = new URLSearchParams({ q: term, 'resources[type]': 'product,collection,query', 'resources[limit]': '6', 'resources[limit_scope]': 'each', 'resources[options][unavailable_products]': 'last' });
+          var res = await fetch(panel.dataset.url + '.json?' + q, { signal: mine.signal, headers: { Accept: 'application/json' } });
+          if (!res.ok) throw new Error('suggest ' + res.status);
+          var data = await res.json();
+          if (mine === request && !panel.hidden) draw(term, data.resources.results);
+        } catch (err) {
+          // Suggestions are a bonus: on failure the bar still searches on Enter
+          if (err.name !== 'AbortError' && mine === request) showIdle();
+        }
+      }
+      icon.addEventListener('click', function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        setOpen(panel.hidden, true);
+      });
+      panel.querySelector('[data-wp-search-close]').addEventListener('click', function () { setOpen(false, true); });
+      input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(search, 220); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) setOpen(false, true); });
+      document.addEventListener('click', function (e) { if (!panel.hidden && !panel.contains(e.target) && !icon.contains(e.target)) setOpen(false, false); });
+      if (menu) menu.addEventListener('toggle', function () { if (menu.open && !panel.hidden) setOpen(false, false); });
+    })();
     // Add to cart without leaving the page, then slide the cart drawer open.
     // "Buy it now" and pages without the drawer keep the normal form submit.
     document.querySelectorAll('.wp-card form, #wp-product-form').forEach(function (form) {
