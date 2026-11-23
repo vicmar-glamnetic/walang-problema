@@ -927,8 +927,8 @@ body:has(#cart-drawer[open])::before{content:"";position:fixed;z-index:90;inset:
 .wp-pdp__info > form{display:contents}
 .wp-pdp__info > :first-child{order:1}
 .wp-pdp__info .wp-opt--color{order:2}
-.wp-pdp__info .wp-pdp__desc{order:3}
-.wp-pdp__info > form > :not(.wp-opt--color){order:4}
+.wp-pdp__info > form > :not(.wp-opt--color){order:3}
+.wp-pdp__info .wp-pdp__desc{order:4}
 .wp-pdp__info .wp-acc{order:5}
 .wp-pdp__price{margin-top:8px}
 }
