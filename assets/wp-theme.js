@@ -18,6 +18,21 @@
         new Promise(function (_, fail) { setTimeout(function () { fail(new Error('cart drawer did not load')); }, 4000); })
       ]).then(function () { if (!cartDrawer.isOpen) cartDrawer.open(); });
     }
+    function frame() { return new Promise(function (done) { requestAnimationFrame(function () { done(); }); }); }
+    function wait(ms) { return new Promise(function (done) { setTimeout(done, ms); }); }
+    // Let the new cart contents finish drawing before the drawer moves, so the slide has the page to itself
+    async function cartReady(wasEmpty) {
+      var limit = performance.now() + 1500;
+      while (wasEmpty && cartDrawer.querySelector('[data-cart-drawer-empty]') && performance.now() < limit) await frame();
+      await frame();
+      try {
+        var running = (await import('@theme/utilities')).viewTransition.current;
+        if (running) await Promise.race([running, wait(600)]);
+      } catch (e) { /* no view transition to wait for */ }
+      var photos = Array.prototype.slice.call(cartDrawer.querySelectorAll('.cart-items__media-image')).slice(0, 4);
+      await Promise.race([Promise.all(photos.map(function (i) { return i.decode().catch(function () {}); })), wait(500)]);
+      await frame();
+    }
     document.querySelectorAll('[data-wp-cart]').forEach(function (link) {
       link.addEventListener('click', function (e) {
         if (!cartDrawer || e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -39,14 +54,15 @@
     // Loading screen while the cart is working
     var loader = document.createElement('div');
     loader.className = 'wp-s wp-loader';
-    loader.hidden = true;
+    loader.inert = true;
     loader.innerHTML = '<div class="wp-loader__card"><span class="wp-loader__art" aria-hidden="true"><i class="wp-loader__sun"></i><i class="wp-loader__sea"></i></span><p class="wp-hand wp-loader__text" role="status"></p></div>';
     document.body.appendChild(loader);
     var loaderTimer;
     function loading(text) {
       clearTimeout(loaderTimer);
-      loader.hidden = !text;
-      loader.querySelector('[role=status]').textContent = text || '';
+      loader.classList.toggle('is-on', !!text);
+      loader.inert = !text;
+      if (text) loader.querySelector('[role=status]').textContent = text;
       // Never trap the shopper: the screen always clears itself
       if (text) loaderTimer = setTimeout(function () { loading(''); }, 20000);
     }
@@ -207,6 +223,7 @@
         added = true;
         var cart = await (await fetch(root + 'cart.js', { headers: { Accept: 'application/json' }, signal: stop.signal })).json();
         var CartLinesUpdateEvent = (await events).CartLinesUpdateEvent;
+        var wasEmpty = !!cartDrawer.querySelector('[data-cart-drawer-empty]');
         var deferred = CartLinesUpdateEvent.createPromise();
         form.dispatchEvent(new CartLinesUpdateEvent({
           action: 'add',
@@ -216,6 +233,8 @@
         }));
         deferred.resolve({ cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart), detail: { items: cart.items, sections: data.sections, source: 'wp-theme', didError: false } });
         setCount(cart.item_count);
+        await cartReady(wasEmpty);
+        loading('');
         await openCart();
       } catch (err) {
         console.error('[wp-cart]', err);
