@@ -1,0 +1,34 @@
+<section class="wp-s wp-lost" {{ section.shopify_attributes }}>
+  {% render 'wp-palm', class: 'wp-palm wp-palm--lost-l', color: '#0E4D4F' %}
+  {% render 'wp-palm', class: 'wp-palm wp-palm--lost-r', color: '#0E4D4F' %}
+  <div class="wp-lost__in">
+    <p class="wp-hd wp-lost__num" aria-hidden="true"><span>4</span><span class="wp-lost__sun"></span><span>4</span></p>
+    {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-lost__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+    <h1 class="wp-hd wp-lost__title">{{ section.settings.heading | escape }}</h1>
+    {%- if section.settings.text != blank -%}<p class="wp-lost__text">{{ section.settings.text | escape }}</p>{%- endif -%}
+    {% render 'wp-search-form', id: 'wp-search-404', class: 'wp-sbar--big', placeholder: section.settings.placeholder, button: true %}
+    <div class="wp-lost__btns">
+      {%- if section.settings.button_label != blank -%}<a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="wp-btn wp-lost__btn">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+      {%- if section.settings.button2_label != blank -%}<a href="{{ section.settings.button2_link | default: routes.root_url }}" class="wp-btn wp-lost__btn wp-lost__btn--ghost">{{ section.settings.button2_label | escape }}</a>{%- endif -%}
+    </div>
+  </div>
+  <div class="wp-lost__sea" aria-hidden="true">
+    <svg class="wp-lost__boat" viewBox="0 0 220 130" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M110 12 V88" stroke="#1B2421" stroke-width="4"></path><path d="M116 16 C150 36 164 58 168 80 H116 Z" fill="#F4EBDD"></path><path d="M104 28 C82 46 72 62 68 80 H104 Z" fill="#C2522B"></path><path d="M14 80 C40 92 180 92 206 80 C198 104 180 114 160 114 H60 C40 114 22 104 14 80 Z" fill="#8A3416"></path><path d="M20 86 C60 96 160 96 200 86" stroke="#F7C873" stroke-width="4"></path><path d="M66 96 L44 122 M154 96 L176 122 M18 122 H202" stroke="#1B2421" stroke-width="4"></path></svg>
+    <svg class="wp-lost__waves" viewBox="0 0 1440 200" preserveAspectRatio="none"><path d="M0 60 C180 20 360 100 540 60 C720 20 900 100 1080 60 C1260 20 1380 80 1440 60 L1440 200 L0 200 Z" fill="#0E4D4F" opacity=".45"></path><path d="M0 100 C180 70 360 130 540 100 C720 70 900 130 1080 100 C1260 70 1380 120 1440 100 L1440 200 L0 200 Z" fill="#0E4D4F" opacity=".75"></path><path d="M0 150 C240 110 480 190 720 150 C960 110 1200 190 1440 150 L1440 200 L0 200 Z" fill="#F4EBDD"></path></svg>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP 404",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Naku po!" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "This page went island hopping" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "No map, no signal, walang problema. Search for what you need or paddle back to shore." },
+    { "type": "text", "id": "placeholder", "label": "Search placeholder", "default": "Tees, caps, bags" },
+    { "type": "text", "id": "button_label", "label": "Button 1 label", "default": "Shop the collection" },
+    { "type": "url", "id": "button_link", "label": "Button 1 link" },
+    { "type": "text", "id": "button2_label", "label": "Button 2 label", "default": "Back to shore" },
+    { "type": "url", "id": "button2_link", "label": "Button 2 link" }
+  ]
+}
+{% endschema %}

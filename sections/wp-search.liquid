@@ -1,0 +1,107 @@
+{%- assign has_results = false -%}
+{%- if search.performed and search.results_count > 0 -%}{%- assign has_results = true -%}{%- endif -%}
+<section class="wp-s wp-banner wp-srch" {{ section.shopify_attributes }}>
+  {% render 'wp-banner-deco' %}
+  <div class="wp-banner__in">
+    <nav class="wp-crumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / Search</nav>
+    {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-banner__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+    <h1 class="wp-hd wp-banner__title">{% if search.performed and search.terms != blank %}&ldquo;{{ search.terms | escape }}&rdquo;{% else %}{{ section.settings.heading | escape }}{% endif %}</h1>
+    {% render 'wp-search-form', id: 'wp-search-page', class: 'wp-sbar--big', placeholder: section.settings.placeholder, button: true %}
+  </div>
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-banner__wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
+</section>
+<section class="wp-s wp-coll wp-srch__body">
+  <nav class="wp-chips" aria-label="Shop by category">
+    <a href="{{ routes.all_products_collection_url }}" class="wp-chip">All</a>
+    {%- for link in linklists[section.settings.category_menu].links -%}
+      {%- if link.type == 'collection_link' -%}<a href="{{ link.url }}" class="wp-chip">{{ link.title | escape }}</a>{%- endif -%}
+    {%- endfor -%}
+  </nav>
+  <div class="wp-coll__main">
+    {%- if has_results -%}
+      {%- paginate search.results by section.settings.per_page -%}
+        <div class="wp-coll__bar">
+          <span class="wp-coll__count" role="status"><span class="wp-hand wp-coll__num">{{ search.results_count }}</span> {% if search.results_count == 1 %}catch{% else %}catches{% endif %} of the day</span>
+          <form method="get" action="{{ routes.search_url }}">
+            <input type="hidden" name="q" value="{{ search.terms | escape }}">
+            <input type="hidden" name="type" value="product">
+            <input type="hidden" name="options[prefix]" value="last">
+            <input type="hidden" name="options[unavailable_products]" value="last">
+            <label class="wp-sort">Sort by
+              <select name="sort_by" data-wp-autosubmit>
+                {%- assign current_sort = search.sort_by | default: search.default_sort_by -%}
+                {%- for option in search.sort_options -%}
+                  <option value="{{ option.value | escape }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name | escape }}</option>
+                {%- endfor -%}
+              </select>
+            </label>
+          </form>
+        </div>
+        <div class="wp-grid wp-grid--shop">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'wp-product-card', product: item, index: forloop.index0 %}
+            {%- else -%}
+              <a href="{{ item.url }}" class="wp-srch__link"><span class="wp-hd">{{ item.title | escape }}</span><span>{{ item.content | strip_html | truncatewords: 18 | escape }}</span></a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="wp-pages" aria-label="Pagination">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>
+              {%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}<a href="{{ paginate.next.url }}" style="padding:0 16px">Next</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      {%- if search.performed and search.terms != blank -%}
+        <div class="wp-island wp-srch__none" role="status">
+          <span class="wp-island__sun" aria-hidden="true"></span>
+          {% render 'wp-palm', class: 'wp-palm wp-island__palm', color: '#0E4D4F' %}
+          <svg viewBox="0 0 400 80" preserveAspectRatio="none" class="wp-island__sea" aria-hidden="true"><path d="M0 30 C70 10 130 50 200 30 C270 10 330 50 400 30 L400 80 L0 80 Z" fill="#0E4D4F" opacity=".45"></path><path d="M0 52 C70 36 130 68 200 52 C270 36 330 68 400 52 L400 80 L0 80 Z" fill="#0E4D4F" opacity=".7"></path></svg>
+          <div class="wp-island__copy">
+            <span class="wp-hand wp-island__kicker">{{ section.settings.none_kicker | escape }}</span>
+            <h2 class="wp-hd wp-island__title">{{ section.settings.none_heading | escape }}</h2>
+            <span class="wp-island__text">{{ section.settings.none_text | escape }}</span>
+            <a href="{{ routes.all_products_collection_url }}" class="wp-btn wp-btn--gold wp-island__btn">Shop the collection</a>
+          </div>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.picks.count > 0 -%}
+        <div class="wp-sec__head wp-srch__picks">
+          <div>
+            {%- if section.settings.picks_kicker != blank -%}<p class="wp-hand wp-sec__kicker">{{ section.settings.picks_kicker | escape }}</p>{%- endif -%}
+            <h2 class="wp-hd wp-sec__title">{{ section.settings.picks_heading | escape }}</h2>
+          </div>
+        </div>
+        <div class="wp-grid wp-grid--shop">
+          {%- for product in section.settings.picks -%}{% render 'wp-product-card', product: product, index: forloop.index0 %}{%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "WP Search",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Anong hanap mo?" },
+    { "type": "text", "id": "heading", "label": "Heading (before a search)", "default": "Search the island" },
+    { "type": "text", "id": "placeholder", "label": "Search placeholder", "default": "Tees, caps, bags" },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 16 },
+    { "type": "link_list", "id": "category_menu", "label": "Category menu (collection links are shown)", "default": "main-menu" },
+    { "type": "header", "content": "No results" },
+    { "type": "text", "id": "none_kicker", "label": "Handwritten line", "default": "Walang problema" },
+    { "type": "text", "id": "none_heading", "label": "Heading", "default": "It drifted out to sea" },
+    { "type": "textarea", "id": "none_text", "label": "Text", "default": "Try a shorter word like tee, cap or bag, or go for a swim through everything we have." },
+    { "type": "header", "content": "Picks (shown before a search and when nothing is found)" },
+    { "type": "text", "id": "picks_kicker", "label": "Handwritten line", "default": "Paborito ng lahat" },
+    { "type": "text", "id": "picks_heading", "label": "Heading", "default": "WP favourites" },
+    { "type": "product_list", "id": "picks", "label": "Products", "limit": 8 }
+  ]
+}
+{% endschema %}
