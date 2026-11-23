@@ -163,6 +163,8 @@ body{margin:0;background:#F4EBDD}
 .wp-pdp__price s{font-size:18px;font-weight:400;opacity:.6;margin-left:8px}
 .wp-pdp__desc{font-size:17px;line-height:1.6;color:#2C2A22}
 .wp-pdp__desc p{margin:0 0 .6em}
+.wp-s .wp-pdp__desc a{color:#0E4D4F;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.wp-s .wp-pdp__desc a:hover{color:#C2522B}
 .wp-opt__label{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:8px}
 .wp-swatches{display:flex;gap:10px;flex-wrap:wrap}
 .wp-swatch{width:44px;height:44px;border-radius:999px;border:3px solid #F4EBDD;cursor:pointer;padding:0}
