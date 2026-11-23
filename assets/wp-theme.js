@@ -25,6 +25,32 @@
         openCart().catch(function (err) { console.error('[wp-cart]', err); window.location.href = link.href; });
       });
     });
+    // Cart count on the header icon, kept in step with every cart change
+    function setCount(n) {
+      document.querySelectorAll('[data-wp-cart]').forEach(function (l) { l.setAttribute('aria-label', n > 0 ? 'Cart (' + n + ')' : 'Cart'); });
+      document.querySelectorAll('[data-wp-cart-count]').forEach(function (c) { c.textContent = n; c.hidden = n < 1; });
+    }
+    var events = import('@shopify/events');
+    events.then(function (m) {
+      document.addEventListener(m.StandardEvents.cartLinesUpdate, function (e) {
+        if (e.promise) e.promise.then(function (r) { if (r && r.cart && typeof r.cart.totalQuantity === 'number') setCount(r.cart.totalQuantity); }).catch(function () {});
+      });
+    }).catch(function (err) { console.error('[wp-cart]', err); });
+    // Loading screen while the cart is working
+    var loader = document.createElement('div');
+    loader.className = 'wp-s wp-loader';
+    loader.hidden = true;
+    loader.innerHTML = '<div class="wp-loader__card"><span class="wp-loader__art" aria-hidden="true"><i class="wp-loader__sun"></i><i class="wp-loader__sea"></i></span><p class="wp-hand wp-loader__text" role="status"></p></div>';
+    document.body.appendChild(loader);
+    var loaderTimer;
+    function loading(text) {
+      clearTimeout(loaderTimer);
+      loader.hidden = !text;
+      loader.querySelector('[role=status]').textContent = text || '';
+      // Never trap the shopper: the screen always clears itself
+      if (text) loaderTimer = setTimeout(function () { loading(''); }, 20000);
+    }
+    window.addEventListener('pageshow', function (e) { if (e.persisted) loading(''); });
     // On desktop the drawer is not modal, so a click on the dimmed page (painted by body) closes it
     document.addEventListener('click', function (e) {
       if (e.target === document.body && cartDrawer && cartDrawer.isOpen && window.matchMedia('(min-width: 990px)').matches) cartDrawer.close();
@@ -134,12 +160,26 @@
       form.addEventListener('submit', function (e) {
         var items = cartDrawer && cartDrawer.querySelector('cart-items-component');
         if (!items) return;
-        if (e.submitter && e.submitter.name === 'checkout') return;
+        if (e.submitter && e.submitter.name === 'checkout') { loading('Paddling to checkout...'); return; }
         e.preventDefault();
         if (form.dataset.wpBusy) return;
         form.dataset.wpBusy = '1';
-        addToCart(form, items.dataset.sectionId).then(function () { delete form.dataset.wpBusy; });
+        var button = e.submitter || form.querySelector('[type=submit]');
+        if (button) { button.classList.add('is-loading'); button.setAttribute('aria-busy', 'true'); }
+        loading('Adding to your cart...');
+        addToCart(form, items.dataset.sectionId).then(function (leaving) {
+          delete form.dataset.wpBusy;
+          if (button) { button.classList.remove('is-loading'); button.removeAttribute('aria-busy'); }
+          if (!leaving) loading('');
+        });
       });
+    });
+    // The checkout button in the cart shows it is working
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('.cart__checkout-button');
+      if (!b || b.disabled) return;
+      b.classList.add('is-loading');
+      setTimeout(function () { b.classList.remove('is-loading'); }, 8000);
     });
     function formMessage(form, text) {
       var el = form.querySelector('.wp-form-msg');
@@ -155,16 +195,18 @@
     async function addToCart(form, sectionId) {
       var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
       var added = false;
+      var stop = new AbortController();
+      var slow = setTimeout(function () { stop.abort(); }, 15000);
       formMessage(form, '');
       try {
         var body = new FormData(form);
         body.append('sections', sectionId);
-        var res = await fetch(root + 'cart/add.js', { method: 'POST', body: body, headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+        var res = await fetch(root + 'cart/add.js', { method: 'POST', body: body, headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, signal: stop.signal });
         var data = await res.json();
         if (!res.ok || data.status) { formMessage(form, data.description || data.message || 'Sorry, we could not add that. Please try again.'); return; }
         added = true;
-        var cart = await (await fetch(root + 'cart.js', { headers: { Accept: 'application/json' } })).json();
-        var CartLinesUpdateEvent = (await import('@shopify/events')).CartLinesUpdateEvent;
+        var cart = await (await fetch(root + 'cart.js', { headers: { Accept: 'application/json' }, signal: stop.signal })).json();
+        var CartLinesUpdateEvent = (await events).CartLinesUpdateEvent;
         var deferred = CartLinesUpdateEvent.createPromise();
         form.dispatchEvent(new CartLinesUpdateEvent({
           action: 'add',
@@ -173,13 +215,15 @@
           promise: deferred.promise
         }));
         deferred.resolve({ cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart), detail: { items: cart.items, sections: data.sections, source: 'wp-theme', didError: false } });
-        document.querySelectorAll('[data-wp-cart]').forEach(function (l) { l.setAttribute('aria-label', 'Cart (' + cart.item_count + ')'); });
+        setCount(cart.item_count);
         await openCart();
       } catch (err) {
         console.error('[wp-cart]', err);
         // The item may already be in the cart, so show the cart instead of adding it twice
-        if (added) window.location.href = root + 'cart';
-        else formMessage(form, 'Sorry, something went wrong. Please try again.');
+        if (added) { window.location.href = root + 'cart'; return true; }
+        formMessage(form, err.name === 'AbortError' ? 'This is taking too long. Please check your cart before trying again.' : 'Sorry, something went wrong. Please try again.');
+      } finally {
+        clearTimeout(slow);
       }
     }
     // Quantity steppers
