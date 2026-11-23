@@ -1,22 +1,181 @@
-<section class="wp-s wp-rel" {{ section.shopify_attributes }}>
-  <h2 class="wp-hd wp-rel__title">{{ section.settings.heading | escape }}</h2>
-  <div class="wp-grid">
-    {%- assign shown = 0 -%}
-    {%- for item in section.settings.collection.products -%}
-      {%- if item.id != product.id and shown < section.settings.limit -%}
-        {%- assign card_index = shown | plus: 1 -%}{% render 'wp-product-card', product: item, index: card_index %}
-        {%- assign shown = shown | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-</section>
+{%- comment -%}
+  Complete the look: mixes product types around the current product.
+  1. Complementary products picked in Search & Discovery come first.
+  2. Then one product per type from the list that suits this product type.
+  3. Anything missing is filled from the other types.
+  The starting point changes per product so pages do not all show the same items.
+{%- endcomment -%}
+{%- liquid
+  assign limit = section.settings.limit
+  assign seed = product.id | modulo: 97
+  assign audience = 'all'
+  assign for_men = false
+  assign for_women = false
+  if product.tags contains 'men' or product.tags contains 'man'
+    assign for_men = true
+  endif
+  if product.tags contains 'women' or product.tags contains 'woman'
+    assign for_women = true
+  endif
+  if for_men and for_women == false
+    assign audience = 'men'
+  elsif for_women and for_men == false
+    assign audience = 'women'
+  endif
+
+  assign even = seed | modulo: 2
+  assign extra_want = 'beach'
+  if even == 1
+    assign extra_want = 'top'
+  endif
+  case product.type
+    when 'T-shirts'
+      assign wants = 'hat,bag,bottom,' | append: extra_want
+    when 'Tops'
+      assign wants = 'bottom,hat,bag,tee'
+    when 'Shorts', 'Pants'
+      assign wants = 'top,hat,bag,tee'
+    when 'Underwear'
+      assign wants = 'tee,hat,bag,beach'
+    when 'Caps', 'Hats'
+      assign wants = 'tee,bag,bottom,' | append: extra_want
+    when 'Bags'
+      assign wants = 'tee,hat,bottom,' | append: extra_want
+    when 'Beach Essentials'
+      assign wants = 'tee,hat,bag,bottom'
+    when 'Kids T-shirts'
+      assign wants = 'kid,hat,kid,bag'
+    else
+      assign wants = 'tee,hat,bag,bottom'
+  endcase
+  assign wants = wants | append: ',hat,bag,tee,top,beach,other,hat,bag,tee' | split: ','
+
+  assign g_tee = ''
+  assign g_top = ''
+  assign g_bottom = ''
+  assign g_hat = ''
+  assign g_bag = ''
+  assign g_beach = ''
+  assign g_kid = ''
+  assign g_other = ''
+-%}
+{%- paginate collections.all.products by 100 -%}
+  {%- for item in collections.all.products -%}
+    {%- liquid
+      if item.id == product.id or item.available == false or item.featured_image == blank
+        continue
+      endif
+      assign item_men = false
+      assign item_women = false
+      if item.tags contains 'men' or item.tags contains 'man'
+        assign item_men = true
+      endif
+      if item.tags contains 'women' or item.tags contains 'woman'
+        assign item_women = true
+      endif
+      if audience == 'men' and item_women and item_men == false
+        continue
+      endif
+      if audience == 'women' and item_men and item_women == false
+        continue
+      endif
+      assign entry = item.handle | append: ','
+      case item.type
+        when 'T-shirts'
+          assign g_tee = g_tee | append: entry
+        when 'Tops'
+          assign g_top = g_top | append: entry
+        when 'Shorts', 'Pants'
+          assign g_bottom = g_bottom | append: entry
+        when 'Underwear'
+          if audience == 'men'
+            assign g_bottom = g_bottom | append: entry
+          endif
+        when 'Caps', 'Hats'
+          assign g_hat = g_hat | append: entry
+        when 'Bags'
+          assign g_bag = g_bag | append: entry
+        when 'Beach Essentials'
+          assign g_beach = g_beach | append: entry
+        when 'Kids T-shirts'
+          assign g_kid = g_kid | append: entry
+        else
+          assign g_other = g_other | append: entry
+      endcase
+    -%}
+  {%- endfor -%}
+{%- endpaginate -%}
+{%- liquid
+  assign used = ','
+  assign shown = 0
+  assign complementary = product.metafields['shopify--discovery--product_recommendation'].complementary_products.value
+  for item in complementary
+    if shown >= limit
+      break
+    endif
+    if item.id != product.id and item.available
+      assign used = used | append: item.handle | append: ','
+      assign shown = shown | plus: 1
+    endif
+  endfor
+  for want in wants
+    if shown >= limit
+      break
+    endif
+    case want
+      when 'tee'
+        assign pool = g_tee
+      when 'top'
+        assign pool = g_top
+      when 'bottom'
+        assign pool = g_bottom
+      when 'hat'
+        assign pool = g_hat
+      when 'bag'
+        assign pool = g_bag
+      when 'beach'
+        assign pool = g_beach
+      when 'kid'
+        assign pool = g_kid
+      else
+        assign pool = g_other
+    endcase
+    assign pool = pool | split: ','
+    if pool.size == 0
+      continue
+    endif
+    assign pos = seed | plus: forloop.index0 | modulo: pool.size
+    for n in (1..pool.size)
+      assign candidate = pool[pos]
+      assign pos = pos | plus: 1 | modulo: pool.size
+      assign key = candidate | prepend: ',' | append: ','
+      unless used contains key
+        assign used = used | append: candidate | append: ','
+        assign shown = shown | plus: 1
+        break
+      endunless
+    endfor
+  endfor
+  assign picks = used | remove_first: ',' | split: ','
+-%}
+{%- if picks.size > 0 -%}
+  <section class="wp-s wp-rel" {{ section.shopify_attributes }}>
+    <h2 class="wp-hd wp-rel__title">{{ section.settings.heading | escape }}</h2>
+    <div class="wp-grid">
+      {%- for pick in picks -%}
+        {%- assign item = all_products[pick] -%}
+        {% render 'wp-product-card', product: item, index: forloop.index %}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
 {% schema %}
 {
   "name": "WP Related products",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Complete the island look" },
-    { "type": "collection", "id": "collection", "label": "Collection" },
-    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 8, "step": 1, "default": 4 }
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "paragraph", "content": "Products are mixed by type to suit each item. To hand-pick for a product, set complementary products in the Search & Discovery app." }
   ],
   "presets": [{ "name": "WP Related products" }]
 }

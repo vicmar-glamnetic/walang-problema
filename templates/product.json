@@ -41,7 +41,6 @@
       "type": "wp-related",
       "settings": {
         "heading": "Complete the island look",
-        "collection": "best-sellers",
         "limit": 4
       }
     }
