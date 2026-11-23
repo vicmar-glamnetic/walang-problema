@@ -12,6 +12,7 @@
     "main": {
       "type": "wp-search",
       "settings": {
+        "kicker": "Anong hanap mo?",
         "heading": "Search the island",
         "picks": [
           "long-logo-t-shirt",
