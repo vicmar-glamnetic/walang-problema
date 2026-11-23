@@ -2,7 +2,12 @@
 <section class="wp-s wp-wide" id="top" {{ section.shopify_attributes }}>
   {%- if section.settings.image != blank -%}
     <div class="wp-wide__photo">
-      {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200, 1600, 2000, 2400', sizes: '100vw', alt: section.settings.image.alt | default: section.settings.title }}
+      <picture>
+        {%- if section.settings.image_mobile != blank -%}
+          <source media="(max-width: 640px)" srcset="{{ section.settings.image_mobile | image_url: width: 500 }} 500w, {{ section.settings.image_mobile | image_url: width: 800 }} 800w, {{ section.settings.image_mobile | image_url: width: 1100 }} 1100w" sizes="100vw">
+        {%- endif -%}
+        {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200, 1600, 2000, 2400', sizes: '100vw', alt: section.settings.image.alt | default: section.settings.title }}
+      </picture>
       <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="wp-wave" aria-hidden="true"><path d="M0 30 C240 0 480 60 720 30 C960 0 1200 60 1440 30 L1440 60 L0 60 Z" fill="#F4EBDD"></path></svg>
     </div>
   {%- endif -%}
@@ -80,6 +85,7 @@
     { "type": "text", "id": "button2_label", "label": "Button 2 label", "default": "Beach Essentials" },
     { "type": "url", "id": "button2_link", "label": "Button 2 link" },
     { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Phone photo, portrait (full-width layout)" },
     { "type": "text", "id": "image_caption", "label": "Photo caption (handwritten)" },
     { "type": "image_picker", "id": "image_2", "label": "Second photo (small, tucked behind)" },
     { "type": "text", "id": "sticker", "label": "Round sticker text" },

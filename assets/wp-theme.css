@@ -1144,3 +1144,21 @@ body:has(#cart-drawer) .page-wrapper{transition:none}
 #cart-drawer .theme-drawer__dialog--opening,#cart-drawer .theme-drawer__dialog--closing{animation-name:wp-fade-in;animation-duration:.01s}
 .wp-s.wp-loader,body::before{transition:none}
 }
+/* homepage banner on phones: tall photo with the headline over it */
+.wp-wide__photo picture{display:block;width:100%;height:100%}
+@media(max-width:640px){
+.wp-wide{display:grid;grid-template-columns:minmax(0,1fr)}
+.wp-wide__in{display:contents}
+.wp-wide .wp-wide__photo{grid-area:1/1;height:min(128vw,66svh);min-height:430px;aspect-ratio:auto}
+.wp-wide .wp-wide__photo img{object-position:center 35%}
+.wp-wide__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(27,36,33,.86) 0,rgba(27,36,33,.6) 26%,rgba(27,36,33,.12) 52%,rgba(27,36,33,0) 64%)}
+.wp-wide .wp-wave{z-index:2;height:34px}
+.wp-wide__head{grid-area:1/1;align-self:end;position:relative;z-index:3;padding:0 24px 52px;pointer-events:none}
+.wp-wide .wp-hero__kicker{margin:0 0 2px;font-size:32px;line-height:1.2;color:#F7C873}
+.wp-wide .wp-hero__title{font-size:clamp(44px,13.4vw,58px);line-height:.98;color:#F4EBDD;text-shadow:0 2px 18px rgba(27,36,33,.35)}
+.wp-wide__side{grid-row:2;padding:14px 24px 36px}
+.wp-wide .wp-hero__text{max-width:none;font-size:16px;line-height:1.55}
+.wp-wide .wp-hero__btns{display:grid;grid-template-columns:1.15fr 1fr;gap:10px;margin-top:18px}
+.wp-wide .wp-hero__btns .wp-btn{min-height:54px;padding:0 8px;font-size:15px;text-align:center;line-height:1.2;box-sizing:border-box}
+.wp-wide .wp-hero__btns .wp-btn:only-child{grid-column:1/-1}
+}
