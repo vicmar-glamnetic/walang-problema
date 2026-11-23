@@ -45,7 +45,7 @@
             {%- assign oname = option.name | downcase -%}
             {%- assign is_color = false -%}
             {%- if oname == 'color' or oname == 'colour' -%}{%- assign is_color = true -%}{%- endif -%}
-            <div data-wp-option="{{ forloop.index0 }}">
+            <div data-wp-option="{{ forloop.index0 }}" class="wp-opt{% if is_color %} wp-opt--color{% endif %}">
               <div class="wp-opt__label">
                 <span>{{ option.name | escape }}{% if is_color %}: <span data-wp-selected>{{ option.selected_value | escape }}</span>{% endif %}</span>
                 {%- if oname == 'size' and pages['size-guide'] != blank -%}<a href="{{ pages['size-guide'].url }}" class="wp-link" style="font-size:14px">Size guide</a>{%- endif -%}

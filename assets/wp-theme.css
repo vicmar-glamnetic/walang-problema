@@ -918,3 +918,22 @@ body:has(#cart-drawer[open]) .page-wrapper--drawer-open{margin-inline-end:0}
 body:has(#cart-drawer[open])::before{content:"";position:fixed;z-index:90;inset:0;background:rgba(27,36,33,.45);cursor:pointer}
 #cart-drawer .theme-drawer__dialog{box-shadow:-18px 0 40px rgba(27,36,33,.25)}
 }
+/* product page on mobile: colors right under the title so the photo stays in view */
+@media(max-width:900px){
+.wp-pdp{padding-top:20px}
+.wp-pdp__cols{gap:18px;margin-top:10px}
+.wp-pdp__gal{flex-basis:100%;gap:10px}
+.wp-pdp__info{flex-basis:100%;gap:18px}
+.wp-pdp__info > form{display:contents}
+.wp-pdp__info > :first-child{order:1}
+.wp-pdp__info .wp-opt--color{order:2}
+.wp-pdp__info .wp-pdp__desc{order:3}
+.wp-pdp__info > form > :not(.wp-opt--color){order:4}
+.wp-pdp__info .wp-acc{order:5}
+.wp-pdp__price{margin-top:8px}
+}
+@media(max-width:640px){
+.wp-pdp__kicker{margin-bottom:6px;font-size:24px;line-height:1.2}
+.wp-pdp__title{font-size:28px}
+.wp-pdp__thumbs{grid-template-columns:repeat(4,60px);gap:10px}
+}
