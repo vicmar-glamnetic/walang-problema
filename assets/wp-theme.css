@@ -517,7 +517,7 @@ body{margin:0;background:#F4EBDD}
 .wp-coll .wp-sort select::-ms-expand{display:none}
 @media(prefers-reduced-motion:reduce){.wp-coll .wp-sort select{transition:none}}
 /* homepage: tropical photo layer */
-.wp-hero--photo .wp-hero__in{position:relative;z-index:1;align-items:center;padding-bottom:88px}
+.wp-hero--photo .wp-hero__in{position:relative;z-index:1;flex-wrap:wrap-reverse;align-items:center;padding-bottom:88px}
 .wp-hero--photo .wp-hero__copy{padding-bottom:24px}
 .wp-hero--photo .wp-hero__art{position:relative;display:flex;justify-content:center;padding:32px 0 40px}
 .wp-hero--photo .wp-hero__art::before{content:"";position:absolute;width:56%;aspect-ratio:1;top:-2%;right:0;border-radius:50%;background:#C2522B;opacity:.9}
@@ -560,7 +560,7 @@ body{margin:0;background:#F4EBDD}
 .wp-hero--photo .wp-hero__art{flex-basis:100%}
 }
 @media(max-width:640px){
-.wp-hero--photo .wp-hero__in{padding-bottom:64px;gap:16px}
+.wp-hero--photo .wp-hero__in{padding-top:20px;padding-bottom:64px;gap:16px}
 .wp-hero--photo .wp-polaroid:not(.wp-polaroid--back){margin-left:6%}
 .wp-polaroid--back{width:44%;padding:6px 6px 18px}
 .wp-sticker{width:84px;height:84px;font-size:16px;padding:8px;right:0;top:0}
