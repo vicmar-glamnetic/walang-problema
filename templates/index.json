@@ -16,7 +16,7 @@
         "kicker": "Mabuhay, islander!",
         "title": "Island Life\nin cotton.",
         "text": "Easy tees, caps and beach gear made for slow mornings, salty air and zero stress. Spread the joy and wear it with pride.",
-        "button_label": "Shop New Arrivals",
+        "button_label": "Shop the collection",
         "button_link": "shopify://collections/all",
         "button2_label": "Beach Essentials",
         "button2_link": "shopify://collections/beach-essentials",
@@ -52,7 +52,7 @@
     },
     "best": {
       "type": "wp-product-grid",
-      "settings": { "kicker": "Paborito ng lahat", "heading": "Best sellers", "link_label": "Shop all best sellers", "collection": "best-sellers", "limit": 4, "filler_heading": "" }
+      "settings": { "kicker": "Paborito ng lahat", "heading": "WP favourites", "link_label": "View all products", "link": "shopify://collections/all", "products": ["long-logo-t-shirt", "animal-patched-cap", "combi-shorts", "green-palm-tree-t-shirt", "journey-to-paradise-t-shirt", "walang-problema-patched-caps", "palm-tree-t-shirt", "palm-tree-net-cap"], "collection": "best-sellers", "limit": 8, "filler_heading": "" }
     },
     "story": {
       "type": "wp-brand-story",

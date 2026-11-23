@@ -1,28 +1,38 @@
+{%- liquid
+  assign use_picks = false
+  assign grid_products = section.settings.collection.products
+  assign grid_total = section.settings.collection.products_count
+  if section.settings.products.count > 0
+    assign use_picks = true
+    assign grid_products = section.settings.products
+    assign grid_total = section.settings.products.count
+  endif
+-%}
 <section class="wp-s wp-sec wp-best" {{ section.shopify_attributes }}>
   <div class="wp-sec__head">
     <div>
       {%- if section.settings.kicker != blank -%}<p class="wp-hand wp-sec__kicker">{{ section.settings.kicker | escape }}</p>{%- endif -%}
       <h2 class="wp-hd wp-sec__title">{{ section.settings.heading | escape }}</h2>
     </div>
-    {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.collection.url | default: routes.all_products_collection_url }}" class="wp-link">{{ section.settings.link_label | escape }}</a>{%- endif -%}
+    {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.link | default: section.settings.collection.url | default: routes.all_products_collection_url }}" class="wp-link">{{ section.settings.link_label | escape }}</a>{%- endif -%}
   </div>
   {%- liquid
     assign grid_count = 0
-    for product in section.settings.collection.products limit: section.settings.limit
+    for product in grid_products limit: section.settings.limit
       assign grid_count = grid_count | plus: 1
     endfor
   -%}
   <div class="wp-grid{% if grid_count == 3 and section.settings.filler_heading == blank %} wp-grid--three{% endif %}">
-    {%- for product in section.settings.collection.products limit: section.settings.limit -%}
+    {%- for product in grid_products limit: section.settings.limit -%}
       {% render 'wp-product-card', product: product, index: forloop.index0 %}
     {%- else -%}
       <p>Pick a collection to show products here.</p>
     {%- endfor -%}
     {%- liquid
-      assign shown = section.settings.collection.products_count | at_most: section.settings.limit
+      assign shown = grid_total | at_most: section.settings.limit
       assign missing = section.settings.limit | minus: shown
     -%}
-    {%- if shown > 0 and missing > 0 and section.settings.filler_heading != blank -%}
+    {%- if use_picks == false and shown > 0 and missing > 0 and section.settings.filler_heading != blank -%}
       <a href="{{ section.settings.filler_link | default: routes.all_products_collection_url }}" class="wp-island wp-island--card" style="grid-column: span {{ missing }}">
         <span class="wp-island__sun" aria-hidden="true"></span>
         {% render 'wp-palm', class: 'wp-palm wp-island__palm', color: '#0E4D4F' %}
@@ -43,6 +53,8 @@
     { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Paborito ng lahat" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Best sellers" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Shop all best sellers" },
+    { "type": "url", "id": "link", "label": "Link (empty uses the collection)" },
+    { "type": "product_list", "id": "products", "label": "Hand-picked products (replaces the collection)", "limit": 12 },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 4 },
     { "type": "header", "content": "Filler card for empty product slots" },
