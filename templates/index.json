@@ -30,10 +30,10 @@
     "strip": {
       "type": "wp-value-strip",
       "blocks": {
-        "i1": { "type": "item", "settings": { "text": "Cotton comfort" } },
-        "i2": { "type": "item", "settings": { "text": "Island-inspired designs" } },
-        "i3": { "type": "item", "settings": { "text": "Secure online checkout" } },
-        "i4": { "type": "item", "settings": { "text": "Made for island living" } }
+        "i1": { "type": "item", "settings": { "icon": "shirt", "text": "Cotton comfort" } },
+        "i2": { "type": "item", "settings": { "icon": "palm", "text": "Island-inspired designs" } },
+        "i3": { "type": "item", "settings": { "icon": "lock", "text": "Secure online checkout" } },
+        "i4": { "type": "item", "settings": { "icon": "waves", "text": "Made for island living" } }
       },
       "block_order": ["i1", "i2", "i3", "i4"],
       "settings": {}

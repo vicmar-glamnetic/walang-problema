@@ -1,12 +1,12 @@
 <div class="wp-s wp-strip" {{ section.shopify_attributes }}>
   <div class="wp-strip__in">
-    {%- for block in section.blocks -%}<span {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</span>{%- endfor -%}
+    {%- for block in section.blocks -%}<div class="wp-strip__item" {{ block.shopify_attributes }}><span class="wp-strip__icon">{% render 'wp-icon', name: block.settings.icon %}</span><span>{{ block.settings.text | escape }}</span></div>{%- endfor -%}
   </div>
 </div>
 {% schema %}
 {
   "name": "WP Value strip",
-  "blocks": [{ "type": "item", "name": "Item", "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Cotton comfort" }] }],
-  "presets": [{ "name": "WP Value strip", "blocks": [{ "type": "item", "settings": { "text": "Cotton comfort" } }, { "type": "item", "settings": { "text": "Island-inspired designs" } }, { "type": "item", "settings": { "text": "Secure online checkout" } }, { "type": "item", "settings": { "text": "Made for island living" } }] }]
+  "blocks": [{ "type": "item", "name": "Item", "settings": [{ "type": "select", "id": "icon", "label": "Icon", "default": "shirt", "options": [{ "value": "shirt", "label": "Shirt" }, { "value": "palm", "label": "Palm tree" }, { "value": "lock", "label": "Lock" }, { "value": "waves", "label": "Sun and waves" }, { "value": "heart", "label": "Heart" }] }, { "type": "text", "id": "text", "label": "Text", "default": "Cotton comfort" }] }],
+  "presets": [{ "name": "WP Value strip", "blocks": [{ "type": "item", "settings": { "icon": "shirt", "text": "Cotton comfort" } }, { "type": "item", "settings": { "icon": "palm", "text": "Island-inspired designs" } }, { "type": "item", "settings": { "icon": "lock", "text": "Secure online checkout" } }, { "type": "item", "settings": { "icon": "waves", "text": "Made for island living" } }] }]
 }
 {% endschema %}

@@ -48,7 +48,7 @@ body{margin:0;background:#F4EBDD}
 .wp-hero--story .wp-crumb{color:#2C2A22;margin-bottom:16px}
 /* value strip */
 .wp-strip{background:#0E4D4F;color:#F4EBDD}
-.wp-strip__in{max-width:1600px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;font-size:15px;font-weight:500}
+.wp-strip__in{max-width:1600px;margin:0 auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;font-size:16px;font-weight:600}
 /* section headers */
 .wp-sec{max-width:1600px;margin:0 auto}
 .wp-sec__head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:32px}
@@ -530,8 +530,9 @@ body{margin:0;background:#F4EBDD}
 .wp-polaroid--back img{aspect-ratio:4/3;object-fit:cover}
 .wp-hero--photo .wp-polaroid:not(.wp-polaroid--back){margin-left:10%}
 .wp-sticker{position:absolute;z-index:2;right:2%;top:6px;width:118px;height:118px;border-radius:50%;background:#F7C873;color:#0E4D4F;display:flex;align-items:center;justify-content:center;text-align:center;font-size:22px;line-height:1.05;padding:14px;box-sizing:border-box;transform:rotate(12deg);box-shadow:0 8px 20px rgba(27,36,33,.2);border:3px dashed #0E4D4F}
-.wp-strip__in > span{display:inline-flex;align-items:center;gap:10px}
-.wp-strip__in > span::before{content:"";width:12px;height:12px;border-radius:50%;background:#F7C873;box-shadow:0 0 0 4px rgba(247,200,115,.25)}
+.wp-strip__item{display:flex;align-items:center;justify-content:center;gap:14px}
+.wp-strip__icon{flex:none;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#F7C873;color:#0E4D4F}
+.wp-strip__icon svg{width:30px;height:30px;stroke-width:3}
 .wp-cat{transition:transform .25s ease,box-shadow .25s ease}
 .wp-cat:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:0 14px 30px rgba(27,36,33,.16)}
 .wp-cats__grid > .wp-cat:nth-child(2n):hover{transform:translateY(-4px) rotate(1deg)}
@@ -688,4 +689,13 @@ body{margin:0;background:#F4EBDD}
 .wp-island--card .wp-island__title{font-size:22px}
 .wp-card__title{font-size:15px}
 .wp-sec__head{gap:8px;margin-bottom:20px}
+}
+/* value strip: 2 x 2 icons on mobile */
+@media(max-width:900px){
+.wp-strip__in{grid-template-columns:1fr 1fr;gap:24px 16px;padding:28px 24px}
+}
+@media(max-width:640px){
+.wp-strip__in{font-size:14px}
+.wp-strip__item{flex-direction:column;justify-content:flex-start;gap:10px;text-align:center}
+.wp-strip__icon{width:56px;height:56px}
 }
