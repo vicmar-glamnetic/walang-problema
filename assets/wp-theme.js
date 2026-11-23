@@ -8,15 +8,26 @@
         if (f) f.submit();
       });
     });
-    // Mobile header cart: slide the cart drawer open (falls back to the cart page)
+    // Cart icon: slide the cart drawer open at every width.
+    // The link still goes to the cart page if the drawer is missing or never loads.
+    var cartDrawer = document.getElementById('cart-drawer');
+    if (cartDrawer) cartDrawer.setAttribute('no-persist', '');
+    function openCart() {
+      return Promise.race([
+        customElements.whenDefined('theme-drawer'),
+        new Promise(function (_, fail) { setTimeout(function () { fail(new Error('cart drawer did not load')); }, 4000); })
+      ]).then(function () { if (!cartDrawer.isOpen) cartDrawer.open(); });
+    }
     document.querySelectorAll('[data-wp-cart]').forEach(function (link) {
       link.addEventListener('click', function (e) {
-        if (e.metaKey || e.ctrlKey || e.shiftKey || !window.matchMedia('(max-width: 900px)').matches) return;
-        var drawer = document.getElementById('cart-drawer');
-        if (!drawer || typeof drawer.open !== 'function') return;
+        if (!cartDrawer || e.metaKey || e.ctrlKey || e.shiftKey) return;
         e.preventDefault();
-        drawer.open();
+        openCart().catch(function (err) { console.error('[wp-cart]', err); window.location.href = link.href; });
       });
+    });
+    // On desktop the drawer is not modal, so a click on the dimmed page (painted by body) closes it
+    document.addEventListener('click', function (e) {
+      if (e.target === document.body && cartDrawer && cartDrawer.isOpen && window.matchMedia('(min-width: 990px)').matches) cartDrawer.close();
     });
     // Header search: the icon opens a full-width bar with live suggestions.
     // Without JavaScript the icon is a plain link to the search page.
@@ -121,14 +132,13 @@
     // "Buy it now" and pages without the drawer keep the normal form submit.
     document.querySelectorAll('.wp-card form, #wp-product-form').forEach(function (form) {
       form.addEventListener('submit', function (e) {
-        var drawer = document.getElementById('cart-drawer');
-        var items = drawer && drawer.querySelector('cart-items-component');
-        if (!items || typeof drawer.open !== 'function') return;
+        var items = cartDrawer && cartDrawer.querySelector('cart-items-component');
+        if (!items) return;
         if (e.submitter && e.submitter.name === 'checkout') return;
         e.preventDefault();
         if (form.dataset.wpBusy) return;
         form.dataset.wpBusy = '1';
-        addToCart(form, drawer, items.dataset.sectionId).then(function () { delete form.dataset.wpBusy; });
+        addToCart(form, items.dataset.sectionId).then(function () { delete form.dataset.wpBusy; });
       });
     });
     function formMessage(form, text) {
@@ -142,7 +152,7 @@
       el.textContent = text;
       el.hidden = !text;
     }
-    async function addToCart(form, drawer, sectionId) {
+    async function addToCart(form, sectionId) {
       var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
       var added = false;
       formMessage(form, '');
@@ -164,8 +174,9 @@
         }));
         deferred.resolve({ cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart), detail: { items: cart.items, sections: data.sections, source: 'wp-theme', didError: false } });
         document.querySelectorAll('[data-wp-cart]').forEach(function (l) { l.setAttribute('aria-label', 'Cart (' + cart.item_count + ')'); });
-        if (!drawer.isOpen) drawer.open();
+        await openCart();
       } catch (err) {
+        console.error('[wp-cart]', err);
         // The item may already be in the cart, so show the cart instead of adding it twice
         if (added) window.location.href = root + 'cart';
         else formMessage(form, 'Sorry, something went wrong. Please try again.');

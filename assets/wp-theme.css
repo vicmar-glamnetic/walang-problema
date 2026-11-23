@@ -911,3 +911,10 @@ body{margin:0;background:#F4EBDD}
 .wp-footer__credit a{color:#F7C873;font-weight:600}
 .wp-footer__credit a:hover{text-decoration:underline;text-underline-offset:3px}
 @media(max-width:640px){.wp-footer__credit span + span{padding-left:0;border-left:0}}
+/* cart drawer: slides over the page with a dimmed background */
+#cart-drawer .theme-drawer__dialog{z-index:calc(100 + var(--drawer-stack-order, 0))}
+@media(min-width:990px){
+body:has(#cart-drawer[open]) .page-wrapper--drawer-open{margin-inline-end:0}
+body:has(#cart-drawer[open])::before{content:"";position:fixed;z-index:90;inset:0;background:rgba(27,36,33,.45);cursor:pointer}
+#cart-drawer .theme-drawer__dialog{box-shadow:-18px 0 40px rgba(27,36,33,.25)}
+}
