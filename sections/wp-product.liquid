@@ -20,7 +20,7 @@
       </div>
       <div class="wp-pdp__thumbs">
         {%- if product.images.size > 1 -%}
-          {%- for image in product.images limit: 4 -%}
+          {%- for image in product.images -%}
             <button type="button" class="wp-thumb" data-wp-thumb data-src="{{ image | image_url: width: 1200 }}" aria-label="View photo {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">{{ image | image_url: width: 300 | image_tag: loading: 'lazy', alt: image.alt }}</button>
           {%- endfor -%}
         {%- elsif product.images.size == 0 -%}
@@ -37,7 +37,7 @@
         <h1 class="wp-hd wp-pdp__title">{{ product.title | escape }}</h1>
         <p class="wp-pdp__price" data-wp-price>{{ current.price | money_without_trailing_zeros }}{% if current.compare_at_price > current.price %}<s>{{ current.compare_at_price | money_without_trailing_zeros }}</s>{% endif %}</p>
       </div>
-      {%- if product.description != blank -%}<div class="wp-pdp__desc">{{ product.description }}</div>{%- endif -%}
+      {%- if product.description != blank -%}<div class="wp-pdp__desc"><p class="wp-hd wp-pdp__h">{{ section.settings.desc_heading | escape }}</p>{{ product.description }}</div>{%- endif -%}
       {%- form 'product', product, id: 'wp-product-form' -%}
         <input type="hidden" name="id" value="{{ current.id }}">
         {%- unless product.has_only_default_variant -%}
@@ -79,10 +79,22 @@
         </div>
         <button type="submit" name="checkout" class="wp-btn wp-btn--gold wp-btn--now" data-wp-buy{% unless current.available %} disabled{% endunless %}>Buy it now</button>
       {%- endform -%}
+      {%- if section.settings.show_facts -%}
+        {%- assign returnable = false -%}
+        {%- case product.type -%}{%- when 'T-shirts', 'Kids T-shirts', 'Tops', 'Shorts', 'Pants' -%}{%- assign returnable = true -%}{%- endcase -%}
+        <ul class="wp-facts">
+          <li class="wp-fact"><span class="wp-fact__icon">{% render 'wp-icon', name: 'truck' %}</span><span><b>{{ section.settings.ship_title | escape }}</b><small>{{ section.settings.ship_text | escape }}</small></span></li>
+          {%- if returnable -%}<li class="wp-fact"><span class="wp-fact__icon">{% render 'wp-icon', name: 'return' %}</span><span><b>{{ section.settings.return_title | escape }}</b><small>{{ section.settings.return_text | escape }}</small></span></li>{%- endif -%}
+          <li class="wp-fact"><span class="wp-fact__icon">{% render 'wp-icon', name: 'palm' %}</span><span><b>{{ section.settings.home_title | escape }}</b><small>{{ section.settings.home_text | escape }}</small></span></li>
+        </ul>
+      {%- endif -%}
       <div class="wp-acc">
         {%- for block in section.blocks -%}
           <details{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
-            <summary>{{ block.settings.heading | escape }}</summary>
+            {%- assign acc_key = block.settings.heading | downcase -%}
+            {%- assign acc_icon = 'info' -%}
+            {%- if acc_key contains 'size' or acc_key contains 'fit' -%}{%- assign acc_icon = 'ruler' -%}{%- elsif acc_key contains 'ship' or acc_key contains 'deliver' -%}{%- assign acc_icon = 'truck' -%}{%- endif -%}
+            <summary><span class="wp-acc__icon">{% render 'wp-icon', name: acc_icon %}</span><span class="wp-acc__title">{{ block.settings.heading | escape }}</span></summary>
             <div class="wp-acc__body">{{ block.settings.text }}</div>
           </details>
         {%- endfor -%}
@@ -98,7 +110,16 @@
 {
   "name": "WP Product",
   "settings": [
-    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Para sa mga nature lovers" }
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Para sa mga nature lovers" },
+    { "type": "text", "id": "desc_heading", "label": "Description heading (mobile)", "default": "The details" },
+    { "type": "header", "content": "Quick facts" },
+    { "type": "checkbox", "id": "show_facts", "label": "Show quick facts", "default": true },
+    { "type": "text", "id": "ship_title", "label": "Shipping title", "default": "₱190 flat shipping" },
+    { "type": "text", "id": "ship_text", "label": "Shipping text", "default": "5 to 15 working days" },
+    { "type": "text", "id": "return_title", "label": "Returns title (clothing only)", "default": "7-day returns" },
+    { "type": "text", "id": "return_text", "label": "Returns text", "default": "Unworn, in original packaging" },
+    { "type": "text", "id": "home_title", "label": "Brand title", "default": "From El Nido" },
+    { "type": "text", "id": "home_text", "label": "Brand text", "default": "Dreamed up in Palawan" }
   ],
   "blocks": [{
     "type": "accordion", "name": "Accordion",

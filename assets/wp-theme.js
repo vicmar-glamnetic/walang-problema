@@ -210,6 +210,15 @@
       try { return new Intl.NumberFormat(document.documentElement.lang || 'en', { style: 'currency', currency: data.currency, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(c / 100); }
       catch (e) { return (c / 100).toFixed(2); }
     }
+    // Highlight the thumbnail that matches the main photo and bring it into view
+    function markThumb(src) {
+      var thumbs = Array.prototype.slice.call(root.querySelectorAll('[data-wp-thumb]'));
+      var hit = thumbs.find(function (t) { return new URL(t.dataset.src, window.location.href).pathname === new URL(src, window.location.href).pathname; });
+      if (!hit) return;
+      thumbs.forEach(function (t) { t.setAttribute('aria-current', t === hit ? 'true' : 'false'); });
+      var strip = hit.parentElement;
+      strip.scrollTo({ left: hit.offsetLeft - strip.offsetLeft - (strip.clientWidth - hit.offsetWidth) / 2, behavior: 'smooth' });
+    }
     function find() {
       return data.variants.find(function (v) { return sel.every(function (s, i) { return v.options[i] === s; }); });
     }
@@ -231,7 +240,11 @@
       addBtn.disabled = !v.available; if (buyBtn) buyBtn.disabled = !v.available;
       addBtn.textContent = v.available ? data.addLabel : data.soldOutLabel;
       var u = new URL(window.location.href); u.searchParams.set('variant', v.id); window.history.replaceState({}, '', u);
-      if (v.image) { var main = root.querySelector('[data-wp-main-img]'); if (main) { main.src = v.image; main.removeAttribute('srcset'); } }
+      if (v.image) {
+        var main = root.querySelector('[data-wp-main-img]');
+        if (main) { main.src = v.image; main.removeAttribute('srcset'); }
+        markThumb(v.image);
+      }
     }
     groups.forEach(function (g, i) {
       g.querySelectorAll('button').forEach(function (b) {
