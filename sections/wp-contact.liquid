@@ -19,7 +19,7 @@
     <div class="wp-reach">
       {% render 'wp-palm', class: 'wp-palm wp-palm--reach', color: '#C2522B' %}
       <h2 class="wp-hd">{{ section.settings.reach_heading | escape }}</h2>
-      {%- if section.settings.email != blank -%}<a href="mailto:{{ section.settings.email | escape }}" style="word-break: break-all">{{ section.settings.email | escape }}</a>{%- endif -%}
+      {%- if section.settings.email != blank -%}<a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape | replace: '@', '<wbr>@' }}</a>{%- endif -%}
       {%- if section.settings.facebook_url != blank -%}<a href="{{ section.settings.facebook_url }}">{{ section.settings.facebook_label | escape }}</a>{%- endif -%}
       {%- if section.settings.instagram_url != blank -%}<a href="{{ section.settings.instagram_url }}">{{ section.settings.instagram_label | escape }}</a>{%- endif -%}
       {%- if section.settings.phone != blank -%}<a href="tel:{{ section.settings.phone | remove: " " | remove: "." }}">{{ section.settings.phone | escape }}</a>{%- endif -%}
