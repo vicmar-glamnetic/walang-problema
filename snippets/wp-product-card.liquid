@@ -5,7 +5,7 @@
 {%- assign wp_bgs = '#E6D9C2,#D9E4D2,#F2D9C4,#D6E8E6,#EFE3CF,#F7DCC0' | split: ',' -%}
 {%- assign wp_i = index | default: 0 | modulo: 6 -%}
 <article class="wp-card">
-  <a href="{{ product.url }}" class="wp-card__media" aria-label="{{ 'accessibility.view_product' | t: default: 'View' }} {{ product.title | escape }}">
+  <a href="{{ product.url }}" class="wp-card__media" aria-label="View {{ product.title | escape }}">
     <div class="wp-card__box{% if product.tags contains 'white-bg' %} wp-white-bg{% endif %}" style="background: {% if product.featured_image %}#FFFFFF{% else %}{{ wp_bgs[wp_i] }}{% endif %}">
       {%- if product.tags contains 'best-seller' -%}
         <span class="wp-badge">Best seller</span>
@@ -27,7 +27,7 @@
     </span>
   </div>
   {%- if product.available == false -%}
-    <button type="button" class="wp-card__btn" disabled>{{ 'content.sold_out' | t: default: 'Sold out' }}</button>
+    <button type="button" class="wp-card__btn" disabled>{{ 'products.product.sold_out' | t }}</button>
   {%- elsif product.variants.size == 1 -%}
     {%- form 'product', product -%}
       <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
