@@ -13,6 +13,9 @@
     {%- liquid
       assign active_count = 0
       for filter in collection.filters
+        if filter.param_name == 'filter.v.availability'
+          continue
+        endif
         assign active_count = active_count | plus: filter.active_values.size
       endfor
     -%}
@@ -20,7 +23,26 @@
     <summary class="wp-fdet__sum">Filters{% if active_count > 0 %} ({{ active_count }}){% endif %}</summary>
     <form id="wp-filters" method="get" action="{{ collection.url }}">
       {%- if collection.sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{%- endif -%}
+      {%- comment -%} Type (Caps, Hats, Bags...) goes first. In stock / Out of stock is hidden. {%- endcomment -%}
       {%- for filter in collection.filters -%}
+        {%- if filter.param_name == 'filter.p.product_type' and filter.values.size > 1 -%}
+        <fieldset class="wp-fset wp-fset--type">
+          <legend>{{ filter.label | escape }}</legend>
+          <div class="wp-fchips">
+          {%- for value in filter.values -%}
+            {%- if value.count > 0 or value.active -%}
+            <label class="wp-fchip">
+              <input type="checkbox" class="wp-hidebox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %} data-wp-autosubmit>
+              <span>{{ value.label | escape }}</span>
+            </label>
+            {%- endif -%}
+          {%- endfor -%}
+          </div>
+        </fieldset>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for filter in collection.filters -%}
+        {%- if filter.param_name == 'filter.v.availability' or filter.param_name == 'filter.p.product_type' -%}{%- continue -%}{%- endif -%}
         <fieldset class="wp-fset">
           <legend>{{ filter.label | escape }}</legend>
           {%- if filter.type == 'price_range' -%}
