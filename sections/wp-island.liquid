@@ -1,0 +1,28 @@
+{%- if section.settings.heading != blank -%}
+<section class="wp-s wp-islandsec" {{ section.shopify_attributes }}>
+  <a href="{{ section.settings.link | default: routes.root_url }}" class="wp-island">
+    <span class="wp-island__sun" aria-hidden="true"></span>
+    {% render 'wp-palm', class: 'wp-palm wp-island__palm', color: '#0E4D4F' %}
+    <svg viewBox="0 0 400 80" preserveAspectRatio="none" class="wp-island__sea" aria-hidden="true"><path d="M0 30 C70 10 130 50 200 30 C270 10 330 50 400 30 L400 80 L0 80 Z" fill="#0E4D4F" opacity=".45"></path><path d="M0 52 C70 36 130 68 200 52 C270 36 330 68 400 52 L400 80 L0 80 Z" fill="#0E4D4F" opacity=".7"></path></svg>
+    <span class="wp-island__copy">
+      {%- if section.settings.kicker != blank -%}<span class="wp-hand wp-island__kicker">{{ section.settings.kicker | escape }}</span>{%- endif -%}
+      <span class="wp-hd wp-island__title">{{ section.settings.heading | escape }}</span>
+      {%- if section.settings.text != blank -%}<span class="wp-island__text">{{ section.settings.text | escape }}</span>{%- endif -%}
+      {%- if section.settings.button_label != blank -%}<span class="wp-btn wp-btn--gold wp-island__btn">{{ section.settings.button_label | escape }}</span>{%- endif -%}
+    </span>
+  </a>
+</section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "WP Island strip",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Handwritten line", "default": "Born in El Nido" },
+    { "type": "text", "id": "heading", "label": "Heading (empty hides the section)", "default": "Island life, zero stress" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Dreamed up between island hops in Palawan. Made for slow mornings, salty air and good company." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Our story" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "presets": [{ "name": "WP Island strip" }]
+}
+{% endschema %}

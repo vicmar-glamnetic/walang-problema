@@ -1174,3 +1174,26 @@ body:has(#cart-drawer) .page-wrapper{transition:none}
 .wp-palm--trio{opacity:.18}
 .wp-cats--mosaic .wp-cat{background:#FFFFFF}
 .wp-wide__photo img,.wp-trio__photo img,.wp-comm .wp-tile--photo img{filter:brightness(1.08) saturate(1.06)}
+/* island strip: its own section below the products */
+.wp-islandsec{max-width:1600px;margin:0 auto;padding:0 24px 88px;box-sizing:border-box}
+@media(min-width:1200px){.wp-islandsec{padding-left:40px;padding-right:40px}}
+@media(max-width:640px){.wp-islandsec{padding:0 24px 56px}.wp-islandsec .wp-island__sun{width:84px;height:84px;right:-24px;top:-24px}}
+/* footer: tighter lines, photo next to Follow us */
+.wp-footer--island .wp-footer__col,.wp-footer__follow{gap:0}
+.wp-footer__follow{display:flex;flex-direction:column;min-width:0}
+.wp-footer--island .wp-footer__col a{line-height:1.35}
+.wp-footer__links{gap:0 20px}
+.wp-footer--island .wp-footer__brand{gap:8px}
+.wp-footer--island .wp-footer__tag{line-height:1.45}
+.wp-footer__sign{margin-top:0}
+.wp-footer--island .wp-footer__col a.wp-footer__pic{display:block;box-sizing:border-box;width:100%;max-width:220px;margin-top:16px;padding:0;border-radius:20px;overflow:hidden;aspect-ratio:1;background:#0E4D4F}
+.wp-footer__pic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 60%;transition:transform .4s ease}
+.wp-footer__pic:hover img{transform:scale(1.04)}
+.wp-footer__payrow{padding:14px 0}
+@media(min-width:901px){.wp-footer--island .wp-footer__grid{padding-top:48px;padding-bottom:28px}.wp-footer__end{padding-top:0;padding-bottom:24px}}
+@media(min-width:1200px){
+.wp-footer--island .wp-footer__grid{grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,.9fr) minmax(0,1.7fr)}
+.wp-footer--island .wp-footer__col--pic{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:24px}
+.wp-footer--island .wp-footer__col--pic a.wp-footer__pic{flex:0 1 200px;margin-top:0}
+}
+@media(prefers-reduced-motion:reduce){.wp-footer__pic img{transition:none}}

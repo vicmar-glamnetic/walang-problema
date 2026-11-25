@@ -27,10 +27,15 @@
       {%- if section.settings.about_label != blank -%}<a href="{{ section.settings.about_link | default: routes.root_url }}">{{ section.settings.about_label | escape }}</a>{%- endif -%}
       {%- for link in linklists[section.settings.help_menu].links -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endfor -%}
     </nav>
-    <div class="wp-footer__col">
-      <b class="wp-hd">{{ section.settings.social_heading | escape }}</b>
-      {%- if section.settings.social_handle != blank -%}<a href="{{ section.settings.instagram | default: '#' }}" target="_blank" rel="noopener">{{ section.settings.social_handle | escape }}</a>{%- endif -%}
-      <div class="wp-footer__social">{% render 'wp-social', instagram: section.settings.instagram, facebook: section.settings.facebook %}</div>
+    <div class="wp-footer__col{% if section.settings.social_image != blank %} wp-footer__col--pic{% endif %}">
+      <div class="wp-footer__follow">
+        <b class="wp-hd">{{ section.settings.social_heading | escape }}</b>
+        {%- if section.settings.social_handle != blank -%}<a href="{{ section.settings.instagram | default: '#' }}" target="_blank" rel="noopener">{{ section.settings.social_handle | escape }}</a>{%- endif -%}
+        <div class="wp-footer__social">{% render 'wp-social', instagram: section.settings.instagram, facebook: section.settings.facebook %}</div>
+      </div>
+      {%- if section.settings.social_image != blank -%}
+        <a class="wp-footer__pic" href="{{ section.settings.instagram | default: '#' }}" target="_blank" rel="noopener" aria-label="{{ section.settings.social_heading | escape }} {{ section.settings.social_handle | escape }}">{{ section.settings.social_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '200, 300, 400, 600', sizes: '220px', alt: '' }}</a>
+      {%- endif -%}
     </div>
   </div>
   <div class="wp-footer__end">
@@ -77,6 +82,7 @@
     { "type": "text", "id": "social_handle", "label": "Handle", "default": "@walangproblemabrand" },
     { "type": "url", "id": "instagram", "label": "Instagram link" },
     { "type": "url", "id": "facebook", "label": "Facebook link" },
+    { "type": "image_picker", "id": "social_image", "label": "Photo next to Follow us" },
     { "type": "header", "content": "Bottom" },
     { "type": "text", "id": "pay_heading", "label": "Payments label", "default": "We accept" },
     { "type": "text", "id": "pay_fallback", "label": "Text shown until payment methods are set up", "default": "[YOUR PAYMENT METHODS]", "info": "Separate with ·" },
