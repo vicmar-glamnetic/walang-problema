@@ -76,6 +76,7 @@
             <button type="button" data-step="up" aria-label="Increase quantity">+</button>
           </div>
           <button type="submit" name="add" class="wp-btn wp-btn--primary" data-wp-add{% unless current.available %} disabled{% endunless %}>{% if current.available %}Add to cart{% else %}Sold out{% endif %}</button>
+          {% render 'wp-wish-btn', product: product, class: 'wp-wish--pdp' %}
         </div>
         <button type="submit" name="checkout" class="wp-btn wp-btn--gold wp-btn--now" data-wp-buy{% unless current.available %} disabled{% endunless %}>Buy it now</button>
       {%- endform -%}

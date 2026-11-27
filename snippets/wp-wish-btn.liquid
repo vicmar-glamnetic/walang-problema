@@ -1,0 +1,5 @@
+{%- comment -%}
+  Heart that saves a product to the wishlist (kept in the shopper's browser by wp-theme.js).
+  Accepts: product, class (optional extra class).
+{%- endcomment -%}
+<button type="button" class="wp-wish{% if class %} {{ class }}{% endif %}" data-wp-wish="{{ product.handle | escape }}" aria-pressed="false" aria-label="Save {{ product.title | escape }} to wishlist" title="Save to wishlist" hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"></path></svg></button>

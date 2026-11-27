@@ -170,6 +170,127 @@
       document.addEventListener('click', function (e) { if (!panel.hidden && !panel.contains(e.target) && !icon.contains(e.target)) setOpen(false, false); });
       if (menu) menu.addEventListener('toggle', function () { if (menu.open && !panel.hidden) setOpen(false, false); });
     })();
+    // Wishlist: hearts save products in this browser (localStorage), the header heart opens the list.
+    // Hearts stay hidden if the header has the wishlist switched off.
+    (function () {
+      var panel = document.querySelector('[data-wp-wpanel]');
+      if (!panel) return;
+      var KEY = 'wp-wishlist';
+      var list = panel.querySelector('[data-wp-wish-list]');
+      var icon = document.querySelector('.wp-icons [data-wp-wish-open]');
+      var menu = document.querySelector('.wp-mnav');
+      var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
+      var opener = null;
+      function read() {
+        try { var v = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(v) ? v.filter(function (h) { return typeof h === 'string'; }) : []; }
+        catch (e) { return []; }
+      }
+      var saved = read();
+      function write() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* private mode: the list lasts for this page only */ } }
+      function make(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text) n.textContent = text; return n; }
+      function price(cents) {
+        try { return new Intl.NumberFormat(document.documentElement.lang || 'en', { style: 'currency', currency: panel.dataset.currency, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(cents / 100); }
+        catch (e) { return String(cents / 100); }
+      }
+      function sync() {
+        document.querySelectorAll('[data-wp-wish]').forEach(function (b) {
+          var on = saved.indexOf(b.dataset.wpWish) > -1;
+          var name = (b.getAttribute('aria-label') || '').replace(/^(Save|Remove) /, '').replace(/ (to|from) wishlist$/, '');
+          b.hidden = false;
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+          b.setAttribute('aria-label', (on ? 'Remove ' : 'Save ') + name + (on ? ' from wishlist' : ' to wishlist'));
+          b.title = on ? 'Saved to wishlist' : 'Save to wishlist';
+        });
+        document.querySelectorAll('[data-wp-wish-count]').forEach(function (c) { c.textContent = saved.length; c.hidden = saved.length === 0; });
+        document.querySelectorAll('[data-wp-wish-total]').forEach(function (c) { c.textContent = saved.length ? '(' + saved.length + ')' : ''; });
+        if (icon) icon.setAttribute('aria-label', 'Wishlist' + (saved.length ? ' (' + saved.length + ')' : ''));
+      }
+      function toggle(handle) {
+        var i = saved.indexOf(handle);
+        if (i > -1) saved.splice(i, 1); else saved.unshift(handle);
+        write(); sync();
+      }
+      function empty() {
+        list.textContent = '';
+        list.appendChild(make('p', 'wp-hand wp-spanel__label', 'Nothing saved yet'));
+        list.appendChild(make('p', 'wp-spanel__none', 'Tap the heart on any product to keep it here for later. Walang problema, no rush.'));
+      }
+      async function draw() {
+        if (!saved.length) { empty(); return; }
+        list.setAttribute('aria-busy', 'true');
+        var handles = saved.slice();
+        var found = await Promise.all(handles.map(function (h) {
+          return fetch(root + 'products/' + encodeURIComponent(h) + '.js', { headers: { Accept: 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : (r.status === 404 ? 'gone' : null); })
+            .catch(function () { return null; });
+        }));
+        // Products that no longer exist drop off the list
+        var gone = handles.filter(function (h, i) { return found[i] === 'gone'; });
+        if (gone.length) { saved = saved.filter(function (h) { return gone.indexOf(h) < 0; }); write(); sync(); }
+        list.removeAttribute('aria-busy');
+        var items = found.filter(function (p) { return p && p !== 'gone'; });
+        if (!items.length) { if (!saved.length) empty(); else { list.textContent = ''; list.appendChild(make('p', 'wp-spanel__none', 'Your wishlist could not load right now. Try again in a moment.')); } return; }
+        list.textContent = '';
+        list.appendChild(make('p', 'wp-hand wp-spanel__label', items.length === 1 ? '1 saved treasure' : items.length + ' saved treasures'));
+        var grid = make('div', 'wp-spanel__grid');
+        items.forEach(function (p) {
+          var row = make('div', 'wp-wish__row');
+          var a = make('a', 'wp-spanel__item'); a.href = p.url;
+          var pic = make('span', 'wp-spanel__pic' + ((p.tags || []).indexOf('white-bg') > -1 ? ' wp-white-bg' : ''));
+          if (p.featured_image) {
+            var img = document.createElement('img');
+            var src = p.featured_image.indexOf('//') === 0 ? 'https:' + p.featured_image : p.featured_image;
+            img.src = src + (src.indexOf('?') > -1 ? '&' : '?') + 'width=400';
+            img.alt = ''; img.loading = 'lazy';
+            pic.appendChild(img);
+          }
+          a.appendChild(pic);
+          a.appendChild(make('span', 'wp-spanel__name', p.title));
+          a.appendChild(make('span', 'wp-spanel__price', p.available ? price(p.price) : 'Sold out'));
+          var x = make('button', 'wp-wish__x');
+          x.type = 'button';
+          x.setAttribute('aria-label', 'Remove ' + p.title + ' from wishlist');
+          x.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
+          x.addEventListener('click', function () {
+            toggle(p.handle);
+            var next = row.nextElementSibling || row.previousElementSibling;
+            row.remove();
+            var left = grid.children.length;
+            if (!left) { empty(); panel.querySelector('[data-wp-wish-close]').focus(); return; }
+            list.querySelector('.wp-spanel__label').textContent = left === 1 ? '1 saved treasure' : left + ' saved treasures';
+            next.querySelector('.wp-wish__x').focus();
+          });
+          row.appendChild(a); row.appendChild(x);
+          grid.appendChild(row);
+        });
+        list.appendChild(grid);
+      }
+      function setOpen(open, from) {
+        panel.hidden = !open;
+        document.querySelectorAll('[data-wp-wish-open]').forEach(function (b) { b.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+        if (open) {
+          opener = from || icon;
+          if (menu) menu.removeAttribute('open');
+          var search = document.querySelector('[data-wp-spanel]:not([hidden])');
+          if (search) { var sc = search.querySelector('[data-wp-search-close]'); if (sc) sc.click(); }
+          draw();
+          panel.querySelector('[data-wp-wish-close]').focus();
+        } else if (from !== false && opener && opener.offsetParent) opener.focus();
+      }
+      document.addEventListener('click', function (e) {
+        var heart = e.target.closest('[data-wp-wish]');
+        if (heart) { e.preventDefault(); toggle(heart.dataset.wpWish); return; }
+        var open = e.target.closest('[data-wp-wish-open]');
+        if (open) { e.preventDefault(); setOpen(panel.hidden, open); return; }
+        if (e.target.closest('[data-wp-wish-close]')) { setOpen(false); return; }
+        if (!panel.hidden && !panel.contains(e.target) && e.target.isConnected) setOpen(false, false);
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) setOpen(false); });
+      if (menu) menu.addEventListener('toggle', function () { if (menu.open && !panel.hidden) setOpen(false, false); });
+      // Keep other open tabs in step
+      window.addEventListener('storage', function (e) { if (e.key === KEY) { saved = read(); sync(); if (!panel.hidden) draw(); } });
+      sync();
+    })();
     // Add to cart without leaving the page, then slide the cart drawer open.
     // "Buy it now" and pages without the drawer keep the normal form submit.
     document.querySelectorAll('.wp-card form, #wp-product-form').forEach(function (form) {

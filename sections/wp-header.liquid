@@ -9,6 +9,7 @@
         {%- for link in linklists[section.settings.menu].links -%}
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {%- endfor -%}
+        {%- if section.settings.show_wishlist -%}<button type="button" class="wp-mnav__wish" aria-controls="wp-wpanel" data-wp-wish-open>Wishlist <span data-wp-wish-total></span></button>{%- endif -%}
       </nav>
     </details>
     <a href="{{ routes.root_url }}" class="wp-logo" aria-label="{{ shop.name | escape }}">
@@ -26,7 +27,7 @@
     <div class="wp-icons">
       <a href="{{ routes.search_url }}" class="wp-icon-btn" aria-label="Search" aria-expanded="false" aria-controls="wp-spanel" data-wp-search><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></a>
       {%- if section.settings.show_wishlist -%}
-        <button type="button" class="wp-icon-btn wp-icon-btn--wish" aria-label="Wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"></path></svg></button>
+        <button type="button" class="wp-icon-btn wp-icon-btn--wish" aria-label="Wishlist" aria-expanded="false" aria-controls="wp-wpanel" data-wp-wish-open><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"></path></svg><span class="wp-cart-count" data-wp-wish-count aria-hidden="true" hidden>0</span></button>
       {%- endif -%}
       <a href="{{ routes.cart_url }}" class="wp-icon-btn wp-icon-btn--cart" data-wp-cart aria-label="Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span class="wp-cart-count" data-wp-cart-count aria-hidden="true"{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span></a>
     </div>
@@ -51,6 +52,17 @@
       </div>
     </div>
   </div>
+  {%- if section.settings.show_wishlist -%}
+    <div class="wp-spanel wp-wpanel" id="wp-wpanel" data-wp-wpanel data-currency="{{ cart.currency.iso_code }}" role="dialog" aria-labelledby="wp-wpanel-title" hidden>
+      <div class="wp-spanel__in">
+        <div class="wp-spanel__bar">
+          <h2 class="wp-hd wp-wpanel__title" id="wp-wpanel-title">Your wishlist</h2>
+          <button type="button" class="wp-icon-btn wp-spanel__close" aria-label="Close wishlist" data-wp-wish-close><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <div class="wp-spanel__body" data-wp-wish-list></div>
+      </div>
+    </div>
+  {%- endif -%}
 </header>
 {% schema %}
 {

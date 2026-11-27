@@ -9,7 +9,7 @@ Context for Claude Code working in this repo. Read this before making any change
 - Currency PHP, prices include tax, tax not collected. Timezone set to Asia/Singapore (UTC+8, Shopify has no Manila option).
 - Shipping: J&T Standard Delivery, flat ₱190, 5 to 15 business days, Philippines only.
 - Returns: 7 days, unworn and in original packaging. No returns on underwear, swimwear or accessories.
-- Payments shown in footer: GCash, Credit card, Bank transfer (BPI), Cash on delivery.
+- Payments shown in footer: GCash, Credit card, Bank transfer (BPI). No cash on delivery.
 - In-store POS: Square (to be synced with Shopify).
 
 ## Repo and sync
@@ -26,7 +26,8 @@ Context for Claude Code working in this repo. Read this before making any change
 Base theme is Horizon. All brand work lives in custom `wp-` files; leave Horizon's own files alone unless needed.
 - CSS: `assets/wp-theme.css` (all brand styles, mobile rules at 900px and 640px). New blocks are appended, so later rules win: check for an earlier rule with the same selector.
 - JS: `assets/wp-theme.js` (variant picker, photo strip, search panel, cart drawer, add to cart, filter auto-submit).
-- Header: `sections/wp-header.liquid` and `sections/header-group.json`. Mobile is menu, centered logo, search and cart (wishlist icon hidden). Also holds the search panel and the `#wp-white-bg` SVG filter.
+- Header: `sections/wp-header.liquid` and `sections/header-group.json`. Mobile is menu, centered logo, search and cart (wishlist icon hidden; "Wishlist" is in the mobile menu instead). Also holds the search panel, the wishlist panel and the `#wp-white-bg` SVG filter.
+- Wishlist: built in, no app. Hearts (`snippets/wp-wish-btn.liquid`) on product cards and the product page save handles to `localStorage` (`wp-wishlist`), so the list is per browser, not per account. The header heart opens the panel, which loads each product from `/products/{handle}.js`. Turning off `show_wishlist` in the header hides the hearts too.
 - Footer: `sections/wp-footer.liquid` and `sections/footer-group.json`. The Shop column shows the collection links from `main-menu`. "Powered by vjyanson" links to vjyanson.com; the photo credit is off on purpose.
 - Home, in order: `wp-hero` (variant `wide`), `wp-value-strip`, `wp-product-grid` (WP favourites, hand-picked `products`), `wp-categories` (layout `mosaic`), `wp-brand-story` (layout `collage`, three photos), `wp-community` (layout `mosaic`, nine photos), `wp-newsletter`. Older layouts (`home`, `cards`, `panel`, `full`, `split`, `polaroids`) are still options in the theme editor.
 - `wp-newsletter` is the island sunset scene, used on home and collection pages. The bangka is `snippets/wp-boat.liquid`, shared with the 404.
@@ -84,5 +85,4 @@ Base theme is Horizon. All brand work lives in custom `wp-` files; leave Horizon
 - Not yet checked on the storefront by Claude (password protected): cart drawer with real products, search suggestions, newsletter sign-up.
 - Delete the test copy of `sections/wp-search.liquid` from the unpublished "Development" theme (the live theme needs its own).
 - Contact page shows hello@walangproblema.com; confirm the domain email works after the DNS switch or change to the Gmail address.
-- Wishlist app: not installed yet, waiting on VJ.
 - Cutover: paid plan, freeze Woo, import past orders and new customers, DNS switch, test redirects, test order.

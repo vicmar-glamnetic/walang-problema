@@ -1197,3 +1197,34 @@ body:has(#cart-drawer) .page-wrapper{transition:none}
 .wp-footer--island .wp-footer__col--pic a.wp-footer__pic{flex:0 1 200px;margin-top:0}
 }
 @media(prefers-reduced-motion:reduce){.wp-footer__pic img{transition:none}}
+/* wishlist: hearts, header badge, panel */
+.wp-icon-btn--wish{position:relative}
+.wp-wish{width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#0E4D4F;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;box-shadow:0 3px 10px rgba(27,36,33,.14);transition:transform .15s ease,color .15s ease}
+.wp-wish[hidden]{display:none}
+.wp-wish:hover{color:#C2522B;transform:scale(1.08)}
+.wp-wish[aria-pressed="true"]{color:#C2522B}
+.wp-wish[aria-pressed="true"] svg{fill:currentColor}
+.wp-wish:focus-visible{outline:2px solid #C2522B;outline-offset:2px}
+.wp-card{position:relative}
+.wp-card > .wp-wish{position:absolute;top:12px;right:12px;z-index:2}
+.wp-wish--pdp{width:52px;height:52px;flex:none;box-shadow:none;border:2px solid #CDBFA6}
+.wp-wish--pdp:hover{border-color:#C2522B}
+.wp-wpanel__title{margin:0;flex:1 1 auto;font-size:32px;color:#0E4D4F}
+.wp-header:has(.wp-wpanel:not([hidden])){z-index:60}
+.wp-wish__row{position:relative;min-width:0}
+.wp-wish__row .wp-spanel__item{text-decoration:none}
+.wp-wish__x{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:#fff;color:#1B2421;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;box-shadow:0 2px 6px rgba(27,36,33,.18)}
+.wp-wish__x:hover{color:#C2522B}
+.wp-mnav__wish{padding:14px 0;font:500 17px Inter,sans-serif;color:#1B2421;text-align:left;background:transparent;border:0;border-bottom:1px solid #E2D5BF;cursor:pointer}
+@media(prefers-reduced-motion:reduce){.wp-wish{transition:none}}
+@media(max-width:900px){
+.wp-wpanel__title{font-size:26px}
+}
+@media(max-width:640px){
+.wp-card > .wp-wish{top:8px;right:8px;width:38px;height:38px}
+.wp-card > .wp-wish svg{width:19px;height:19px}
+.wp-mnav__wish{font-size:15px;padding:12px 0}
+.wp-wish__row{display:flex;align-items:center;gap:8px}
+.wp-wish__row .wp-spanel__item{flex:1 1 auto;min-width:0}
+.wp-wish__x{position:static;flex:none;box-shadow:none;background:#E2D5BF}
+}
